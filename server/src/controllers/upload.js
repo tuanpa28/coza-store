@@ -1,9 +1,8 @@
-import cloudinary from "../config/cloudinary";
-import { Request, Response } from "express";
+import cloudinary from "../config/cloudinary.js";
 
 // Thêm ảnh
-export const uploadImage = async (req: Request, res: Response) => {
-  const files = req.files as Express.Multer.File[];
+export const uploadImage = async (req, res) => {
+  const files = req.files
 
   if (!Array.isArray(files)) {
     return res.status(400).json({ error: "No files were uploaded!" });
@@ -31,7 +30,7 @@ export const uploadImage = async (req: Request, res: Response) => {
 };
 
 // Sửa ảnh
-export const updateImage = async (req: Request, res: Response) => {
+export const updateImage = async (req, res) => {
   try {
   } catch (error) {
     return res
@@ -41,7 +40,7 @@ export const updateImage = async (req: Request, res: Response) => {
 };
 
 // Xóa ảnh
-export const deleteImage = async (req: Request, res: Response) => {
+export const deleteImage = async (req, res) => {
   const publicId = req.params.publicId;
   try {
     const result = await cloudinary.uploader.destroy(publicId);

@@ -1,12 +1,7 @@
-import { Schema, model, Types, Model } from "mongoose";
-import IProduct from "../interfaces/product";
+import { Schema, model, Types } from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 
-interface IProductModel extends Model<IProduct> {
-  paginate: any;
-}
-
-const Product = new Schema<IProduct>(
+const Product = new Schema(
   {
     name: { type: String, required: true, text: true },
     price: { type: Number, required: true, min: 0 },
@@ -22,4 +17,4 @@ const Product = new Schema<IProduct>(
 Product.index({ name: "text" }); // đăng ký chỉ mục văn bản
 Product.plugin(mongoosePaginate);
 
-export default model<IProduct, IProductModel>("Product", Product);
+export default model("Product", Product);

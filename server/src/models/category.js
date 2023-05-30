@@ -1,8 +1,6 @@
-import { Schema, model, Types, UpdateQuery } from "mongoose";
-import ICategory from "../interfaces/category";
-import IProduct from "../interfaces/product";
+import { Schema, model, Types } from "mongoose";
 
-const Category = new Schema<ICategory>(
+const Category = new Schema(
   {
     name: { type: String, required: true },
     productId: [{ type: Types.ObjectId, ref: "Product", required: true }],
@@ -19,7 +17,7 @@ Category.pre("findOneAndDelete", async function (next) {
     const Product = model("Product");
     const filter = this.getFilter(); // Lấy điều kiện tìm kiếm hiện tại của truy vấn
     const categoryId = this.getQuery().$set?.categoryId; // Lấy giá trị mới của trường categoryId nếu có
-    const update: UpdateQuery<IProduct> = {
+    const update = {
       categoryId: categoryId ?? "uncategorized", // Cập nhật categoryId mới hoặc "uncategorized" nếu không có giá trị mới
     };
 
@@ -36,4 +34,4 @@ Category.pre("findOneAndDelete", async function (next) {
   }
 });
 
-export default model<ICategory>("Category", Category);
+export default model("Category", Category);

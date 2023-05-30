@@ -1,14 +1,13 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../models/user";
-import { signupSchema, signinSchema } from "../schemas/auth";
+import User from "../models/user.js";
+import { signupSchema, signinSchema } from "../schemas/auth.js";
 import dotenv from "dotenv";
-import { Request, Response } from "express";
 dotenv.config();
 
 
 // signup
-export const signup = async (req: Request, res: Response) => {
+export const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const { error } = signupSchema.validate(req.body, { abortEarly: false });
@@ -43,7 +42,7 @@ export const signup = async (req: Request, res: Response) => {
 };
 
 // signin
-export const signin = async (req: Request, res: Response) => {
+export const signin = async (req, res) => {
   try {
     const { email, password } = req.body;
     const { error } = signinSchema.validate(req.body, { abortEarly: false });
@@ -66,11 +65,11 @@ export const signin = async (req: Request, res: Response) => {
     }
 
     // Tạo Token từ server
-    const accessToken = jwt.sign({ _id: user._id }, process.env.SECRET_KEY!, {
+    const accessToken = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, {
       expiresIn: 60 * 60,
     });
 
-    user.password = undefined!;
+    user.password = undefined;
 
     res.status(200).json({
       user,

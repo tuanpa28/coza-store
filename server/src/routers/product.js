@@ -5,10 +5,10 @@ import {
   addProduct,
   editProduct,
   deleteProduct,
-} from "../controllers/product";
-import { checkPermission } from "../middlewares/checkPermission";
+} from "../controllers/product.js";
+import { checkPermission } from "../middlewares/checkPermission.js";
 
-const router: Router = Router();
+const router = Router();
 
 // Lấy tất cả sản phẩm
 router.get("/products", getProducts);

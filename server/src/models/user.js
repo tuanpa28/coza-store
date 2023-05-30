@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
-import IUser from "../interfaces/auth";
 
-const userSchema = new Schema<IUser>(
+const userSchema = new Schema(
   {
     name: { type: String, minLength: 4, maxLength: 255 },
     email: { type: String, required: true, unique: true },
@@ -16,4 +15,4 @@ const userSchema = new Schema<IUser>(
   { timestamps: true, versionKey: false }
 );
 
-export default model<IUser>("User", userSchema);
+export default model("User", userSchema);

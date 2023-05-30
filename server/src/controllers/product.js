@@ -1,10 +1,9 @@
-import Product from "../models/product";
-import Category from "../models/category";
-import { proSchema } from "../schemas/product";
-import { Request, Response } from "express";
+import Product from "../models/product.js";
+import Category from "../models/category.js";
+import { proSchema } from "../schemas/product.js";
 
 // Lấy tất cả sản phẩm
-export const getProducts = async (req: Request, res: Response) => {
+export const getProducts = async (req, res) => {
   try {
     const {
       _page = 1,
@@ -12,7 +11,7 @@ export const getProducts = async (req: Request, res: Response) => {
       _sort = "createdAt",
       _order = "asc",
     } = req.query;
-    const searchText = req.query._searchText as string;
+    const searchText = req.query._searchText;
     const query = searchText
       ? {
           $text: {
@@ -51,7 +50,7 @@ export const getProducts = async (req: Request, res: Response) => {
 };
 
 // Lấy sản phẩm theo id
-export const getProduct = async (req: Request, res: Response) => {
+export const getProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).populate({
       path: "categoryId",
@@ -71,7 +70,7 @@ export const getProduct = async (req: Request, res: Response) => {
 };
 
 // Thêm sản phẩm
-export const addProduct = async (req: Request, res: Response) => {
+export const addProduct = async (req, res) => {
   try {
     const { error } = proSchema.validate(req.body, { abortEarly: false });
     if (error) {
@@ -93,7 +92,7 @@ export const addProduct = async (req: Request, res: Response) => {
 };
 
 // Sửa sản phẩm
-export const editProduct = async (req: Request, res: Response) => {
+export const editProduct = async (req, res) => {
   try {
     const { error } = proSchema.validate(req.body, { abortEarly: false });
     if (error) {
@@ -123,7 +122,7 @@ export const editProduct = async (req: Request, res: Response) => {
 };
 
 // Xóa sản phẩm
-export const deleteProduct = async (req: Request, res: Response) => {
+export const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
 

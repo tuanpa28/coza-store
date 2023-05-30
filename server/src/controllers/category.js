@@ -1,9 +1,8 @@
-import Category from "../models/category";
-import { Request, Response } from "express";
-import { cateSchema } from "../schemas/category";
+import Category from "../models/category.js";
+import { cateSchema } from "../schemas/category.js";
 
 // Lấy tất cả danh mục
-export const getCategories = async (req: Request, res: Response) => {
+export const getCategories = async (req, res) => {
   try {
     const categories = await Category.find().populate({
       path: "productId",
@@ -24,7 +23,7 @@ export const getCategories = async (req: Request, res: Response) => {
 };
 
 // Lấy danh mục theo id
-export const getCategory = async (req: Request, res: Response) => {
+export const getCategory = async (req, res) => {
   try {
     const category = await Category.findById(req.params.id).populate({
       path: "productId",
@@ -46,7 +45,7 @@ export const getCategory = async (req: Request, res: Response) => {
 };
 
 // Thêm danh mục
-export const createCategory = async (req: Request, res: Response) => {
+export const createCategory = async (req, res) => {
   try {
     const { error } = cateSchema.validate(req.body, { abortEarly: false });
 
@@ -68,7 +67,7 @@ export const createCategory = async (req: Request, res: Response) => {
 };
 
 // Sửa danh mục
-export const updateCategory = async (req: Request, res: Response) => {
+export const updateCategory = async (req, res) => {
   try {
     const { error } = cateSchema.validate(req.body, { abortEarly: false });
     if (error) {
@@ -91,7 +90,7 @@ export const updateCategory = async (req: Request, res: Response) => {
 };
 
 // Xóa danh mục
-export const deleteCategory = async (req: Request, res: Response) => {
+export const deleteCategory = async (req, res) => {
   try {
     const category = await Category.findByIdAndDelete(req.params.id);
 

@@ -1,11 +1,9 @@
 import dotenv from "dotenv";
-import { NextFunction } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import User from "../models/user";
-import IUser from "../interfaces/auth";
+import jwt from "jsonwebtoken";
+import User from "../models/user.js";
 dotenv.config();
 
-export const checkPermission = async (req, res, next: NextFunction) => {
+export const checkPermission = async (req, res, next) => {
   try {
     // Kiểm tra có thông tin token không
     if (!req.headers.authorization) {
@@ -17,7 +15,7 @@ export const checkPermission = async (req, res, next: NextFunction) => {
     // Lấy mã token
     const token = req.headers.authorization.split(" ")[1];
 
-    jwt.verify(token, process.env.SECRET_KEY!, async (error, payload) => {
+    jwt.verify(token, process.env.SECRET_KEY, async (error, payload) => {
       if (error) {
         if (error.name === "JsonWebTokenError") {
           return res.status(401).json({ message: "Token không hợp lệ!" });
@@ -28,8 +26,8 @@ export const checkPermission = async (req, res, next: NextFunction) => {
       }
 
       // Tìm user từ id
-      const { _id } = payload as JwtPayload;
-      const user = (await User.findById(_id)) as IUser;
+      const { _id } = payload;
+      const user = (await User.findById(_id));
       if (!user) {
         return res.status(401).json({
           message: "Tài khoản không hợp lệ!",

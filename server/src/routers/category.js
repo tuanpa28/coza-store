@@ -5,10 +5,10 @@ import {
   createCategory,
   updateCategory,
   deleteCategory,
-} from "../controllers/category";
-import { checkPermission } from "../middlewares/checkPermission";
+} from "../controllers/category.js";
+import { checkPermission } from "../middlewares/checkPermission.js";
 
-const router: Router = Router();
+const router = Router();
 
 // Lấy tất cả danh mục
 router.get("/categories", getCategories);
