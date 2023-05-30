@@ -2,11 +2,11 @@ import express from "express";
 import morgan from "morgan";
 import * as dotenv from "dotenv";
 import cors from "cors";
-import connectDB from "./config/database";
-import authRouter from "./routers/auth";
-import cateRouter from "./routers/category";
-import productRouter from "./routers/product";
-import uploadRouter from "./routers/upload";
+import connectDB from "./src/config/database";
+import authRouter from "./src/routers/auth";
+import cateRouter from "./src/routers/category";
+import productRouter from "./src/routers/product";
+import uploadRouter from "./src/routers/upload";
 
 const app = express();
 dotenv.config();
