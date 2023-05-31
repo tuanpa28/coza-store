@@ -11,7 +11,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: "node_react",
     // format: "png",
-  } ,
+  },
 });
 
 const upload = multer({ storage: storage });
