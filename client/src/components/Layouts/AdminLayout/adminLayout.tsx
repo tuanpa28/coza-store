@@ -2,7 +2,9 @@ import Cookies from "js-cookie";
 import { Link, Navigate, Outlet } from "react-router-dom";
 import React, { useState } from "react";
 import { MenuProps, MenuTheme } from "antd";
-import { Breadcrumb, Layout, Menu, theme, Switch, message } from "antd";
+import { Breadcrumb, Layout, Menu,
+  //  theme,
+   Switch, message } from "antd";
 const { Content, Footer, Sider } = Layout;
 import {
   AppstoreOutlined,
@@ -57,9 +59,9 @@ const AdminLayout = () => {
     setCurrent(e.key);
   };
 
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  // const {
+  //   token: { colorBgContainer },
+  // } = theme.useToken();
 
   return (
     <Layout style={{ minHeight: "100vh" }}>

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+// import { useParams } from "react-router-dom";
 import IProduct from "../../interfaces/product";
 import HeaderTop from "../../components/Header/HeaderTop/HeaderTop";
 
@@ -14,13 +14,13 @@ const ProductDetailPage = ({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   handleClick = () => {},
 }: IProductDetailPage) => {
-  const { id } = useParams();
+  // const { id } = useParams();
   // const [product, setProduct] = useState<IProduct>();
 
   // const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const currentPro = products?.find((product) => product._id === id);
+    // const currentPro = products?.find((product) => product._id === id);
     // setProduct(currentPro);
   }, [products]);
 

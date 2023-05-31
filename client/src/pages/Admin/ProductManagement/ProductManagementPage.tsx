@@ -82,10 +82,10 @@ const ProductManagementPage = ({
         </span>
       ),
       filters: [...cateFilter],
-      onFilter: (value: string, record: IProduct) =>
-        record?.categoryId?.startsWith(value),
-      filterMode: "tree",
-      filterSearch: true,
+      // onFilter: (value: any, record: IProduct) =>
+      //   record?.categoryId?.startsWith(value),
+      // filterMode: "tree",
+      // filterSearch: true,
     },
     {
       title: "Action",

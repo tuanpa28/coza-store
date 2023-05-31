@@ -60,18 +60,18 @@ const UpdateProductPage = ({
   };
 
   const onFinish = (values: IProduct) => {
-    if (values?.image?.fileList) {
-      const newImages = values?.image?.fileList?.map(({ response }: any) => {
-        return {
-          url: response.urls[0].url,
-          publicId: response.urls[0].publicId,
-        };
-      });
-      const newValues = { ...values, image: newImages };
-      onHandleUpdate(newValues);
-    } else {
+    // if (values?.image?.fileList) {
+    //   const newImages = values?.image?.fileList?.map(({ response }: any) => {
+    //     return {
+    //       url: response.urls[0].url,
+    //       publicId: response.urls[0].publicId,
+    //     };
+    //   });
+    //   const newValues = { ...values, image: newImages };
+    //   onHandleUpdate(newValues);
+    // } else {
       onHandleUpdate(values);
-    }
+    // }
   };
 
   return (

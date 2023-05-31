@@ -36,10 +36,10 @@ const AddProductPage = ({ onHandleCreate, categories }: IAddProductPage) => {
   };
 
   const onFinish = (values: IProduct) => {
-    const newImages = values?.image?.fileList?.map(({ response }: any) => {
-      return { url: response.urls[0].url, publicId: response.urls[0].publicId };
-    });
-    const newValues = { ...values, image: newImages };
+    // const newImages = values?.image?.fileList?.map(({ response }: any) => {
+    //   return { url: response.urls[0].url, publicId: response.urls[0].publicId };
+    // });
+    const newValues = { ...values, image: "" };
     onHandleCreate(newValues);
   };
 
