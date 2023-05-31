@@ -47,7 +47,7 @@ function App() {
 
   const search = window.location.search;
 
-  const searchParams = new URLSearchParams(search);
+  // const searchParams = new URLSearchParams(search);
 
   // Get Categories
   useEffect(() => {
@@ -172,7 +172,9 @@ function App() {
             <Route
               index
               element={
-                <ProductsPage products={products} searchParams={searchParams} />
+                <ProductsPage
+                //  products={products} searchParams={searchParams} 
+                 />
               }
             />
             {/* Product detail */}
