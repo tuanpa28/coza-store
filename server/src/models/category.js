@@ -1,4 +1,5 @@
 import { Schema, model, Types } from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const Category = new Schema(
   {
@@ -9,6 +10,9 @@ const Category = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
+
+Category.index({ name: "text" }); // đăng ký chỉ mục văn bản
+Category.plugin(mongoosePaginate);
 
 // Trước khi xóa category, cập nhật lại categoryId của các sản phẩm thuộc category này thành uncategory
 Category.pre("findOneAndDelete", async function (next) {

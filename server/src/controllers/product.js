@@ -7,15 +7,17 @@ export const getProducts = async (req, res) => {
   try {
     const {
       _page = 1,
-      _limit = 10,
+      _limit = 12,
       _sort = "createdAt",
       _order = "asc",
+      _expand,
+      _searchText,
     } = req.query;
-    const searchText = req.query._searchText;
-    const query = searchText
+
+    const query = _searchText
       ? {
           $text: {
-            $search: searchText,
+            $search: _searchText,
             $caseSensitive: false,
             $diacriticSensitive: false,
           },
@@ -30,12 +32,19 @@ export const getProducts = async (req, res) => {
       page: _page,
       limit: _limit,
       sort: {
-        [_sort.toString()]: _order === "desc" ? -1 : 1,
+        [_sort]: _order === "desc" ? -1 : 1,
       },
       customLabels: myCustomLabels,
     };
 
-    const products = await Product.paginate(query, options);
+    const populateOptions = _expand
+      ? [{ path: "categoryId", select: "name" }]
+      : [];
+
+    const products = await Product.paginate(query, {
+      ...options,
+      populate: populateOptions,
+    });
 
     if (products.length === 0)
       return res.status(404).json({ message: "Không có sản phẩm nào!" });
@@ -52,11 +61,21 @@ export const getProducts = async (req, res) => {
 // Lấy sản phẩm theo id
 export const getProduct = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id).populate({
-      path: "categoryId",
-      select: "name",
-      populate: { path: "productId", select: "name" },
-    });
+    const { _expand } = req.query;
+
+    const populateOptions = _expand
+      ? [
+          {
+            path: "categoryId",
+            select: "name",
+            // populate: { path: "productId", select: "name" },
+          },
+        ]
+      : [];
+
+    const product = await Product.findById(req.params.id).populate(
+      populateOptions
+    );
 
     if (!product) return res.json({ message: "Không tìm thấy sản phẩm!" });
 

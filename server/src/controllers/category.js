@@ -4,9 +4,45 @@ import { cateSchema } from "../schemas/category.js";
 // Lấy tất cả danh mục
 export const getCategories = async (req, res) => {
   try {
-    const categories = await Category.find().populate({
-      path: "productId",
-      select: "name",
+    const {
+      _page = 1,
+      _limit = 10,
+      _sort = "createdAt",
+      _order = "asc",
+      _embed,
+      _searchText,
+    } = req.query;
+
+    const query = _searchText
+      ? {
+          $text: {
+            $search: _searchText,
+            $caseSensitive: false,
+            $diacriticSensitive: false,
+          },
+        }
+      : {};
+
+    const myCustomLabels = {
+      docs: "data",
+    };
+
+    const options = {
+      page: _page,
+      limit: _limit,
+      sort: {
+        [_sort]: _order === "desc" ? -1 : 1,
+      },
+      customLabels: myCustomLabels,
+    };
+
+    const populateOptions = _embed
+      ? [{ path: "productId", select: "name" }]
+      : [];
+
+    const categories = await Category.paginate(query, {
+      ...options,
+      populate: populateOptions,
     });
 
     if (categories.length === 0) {
@@ -25,11 +61,21 @@ export const getCategories = async (req, res) => {
 // Lấy danh mục theo id
 export const getCategory = async (req, res) => {
   try {
-    const category = await Category.findById(req.params.id).populate({
-      path: "productId",
-      select: "name",
-      populate: { path: "categoryId", select: "name" },
-    });
+    const { _embed } = req.query;
+
+    const populateOptions = _embed
+      ? [
+          {
+            path: "productId",
+            select: "name",
+            // populate: { path: "categoryId", select: "name" },
+          },
+        ]
+      : [];
+
+    const category = await Category.findById(req.params.id).populate(
+      populateOptions
+    );
 
     if (!category) {
       return res.status(404).json({ message: "Không có danh mục nào!" });
