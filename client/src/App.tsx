@@ -69,7 +69,7 @@ function App() {
       try {
         const {
           data: { products },
-        } = await getProducts(window.location.search);
+        } = await getProducts(search);
         setProducts(products.data);
       } catch (error) {
         console.log(error);

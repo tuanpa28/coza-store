@@ -3,7 +3,17 @@ interface IProduct {
   _id?: string;
   name: string;
   price: number;
-  image: string;
+  image: {
+    url: string;
+    publicId: string;
+  };
+  album: [
+    {
+      url: string;
+      publicId: string;
+    }
+  ];
+  quantity: number;
   description: string;
   categoryId?: ICategory;
 }

@@ -1,12 +1,12 @@
-import { useEffect } from "react";
-// import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import IProduct from "../../interfaces/product";
 import HeaderTop from "../../components/Header/HeaderTop/HeaderTop";
 
 interface IProductDetailPage {
   products: IProduct[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  handleClick?: any;
+  handleClick?: () => void;
 }
 
 const ProductDetailPage = ({
@@ -14,15 +14,15 @@ const ProductDetailPage = ({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   handleClick = () => {},
 }: IProductDetailPage) => {
-  // const { id } = useParams();
-  // const [product, setProduct] = useState<IProduct>();
+  const { id } = useParams();
+  const [product, setProduct] = useState<IProduct>();
 
   // const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // const currentPro = products?.find((product) => product._id === id);
-    // setProduct(currentPro);
-  }, [products]);
+    const currentPro = products?.find((product) => product._id === id);
+    setProduct(currentPro);
+  }, [products, id]);
 
   return (
     <>
@@ -44,29 +44,16 @@ const ProductDetailPage = ({
               <div className="all-img-detail">
                 <div className="sup-img-detail">
                   <ul>
-                    <li>
-                      <img
-                        src="https://res.cloudinary.com/dugodumc5/image/upload/v1685293341/coza-store/sn6sgoahfrs1fiywbzsi.webp"
-                        alt=""
-                      />
-                    </li>
-                    <li>
-                      <img
-                        src="https://res.cloudinary.com/dugodumc5/image/upload/v1685293264/coza-store/avydaud8d4vnfxb1s5s1.webp"
-                        alt=""
-                      />
-                    </li>
-                    <li>
-                      <img
-                        src="https://res.cloudinary.com/dugodumc5/image/upload/v1685293263/coza-store/bmoqn62vbcogzi5pyqbc.webp"
-                        alt=""
-                      />
-                    </li>
+                    {product?.album.map((item) => (
+                      <li>
+                        <img src={item.url} alt="" />
+                      </li>
+                    ))}
                   </ul>
                 </div>
                 <div className="img-detail">
                   <img
-                    src="https://res.cloudinary.com/dugodumc5/image/upload/v1685294639/coza-store/gzxl3ycytfdbrjonzbhu.webp"
+                    src={product?.image.url}
                     alt=""
                   />
                   <a href="">
@@ -84,11 +71,10 @@ const ProductDetailPage = ({
               </div>
               {/* <!--end all-img-detail--> */}
               <div className="content-img-detail">
-                <h4>Lightweight Jacket</h4>
-                <span>$58.79</span>
+                <h4>{product?.name}</h4>
+                <span>${product?.price}</span>
                 <p>
-                  Nulla eget sem vitae eros pharetra viverra. Nam vitae luctus
-                  ligula. Mauris consequat ornare feugiat.
+                 {product?.description}
                 </p>
                 <div className="all-choose">
                   <div className="choose">

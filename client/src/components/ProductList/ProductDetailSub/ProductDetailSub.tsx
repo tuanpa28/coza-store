@@ -1,17 +1,17 @@
 
 interface IProductDetailSub {
   isClicked: boolean;
-  handleClick: () => void;
+  handleShowProductDetail: () => void;
 }
 
-const ProductDetailSub = ({ isClicked, handleClick }: IProductDetailSub) => {
+const ProductDetailSub = ({ isClicked, handleShowProductDetail }: IProductDetailSub) => {
   return (
     <div
       id="app"
       style={{ display: isClicked ? "block" : "none" }}
       className="sub_detail-product"
     >
-      <div id="clear" onClick={() => handleClick()}>
+      <div id="clear" onClick={() => handleShowProductDetail()}>
         <button>
           <img
             src="https://res.cloudinary.com/dugodumc5/image/upload/v1685294476/coza-store/rxgbixnfs0b1d7aysbu4.webp"
