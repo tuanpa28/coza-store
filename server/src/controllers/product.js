@@ -12,17 +12,24 @@ export const getProducts = async (req, res) => {
       _order = "asc",
       _expand,
       _searchText,
+      _minPrice,
+      _maxPrice,
     } = req.query;
 
-    const query = _searchText
-      ? {
-          $text: {
-            $search: _searchText,
-            $caseSensitive: false,
-            $diacriticSensitive: false,
-          },
-        }
-      : {};
+    let query = {};
+    if (_searchText) {
+      query = {
+        $text: {
+          $search: _searchText,
+          $caseSensitive: false,
+          $diacriticSensitive: false,
+        },
+      };
+    } else if (_minPrice && _maxPrice) {
+      query = {
+        price: { $gte: _minPrice, $lte: _maxPrice },
+      };
+    }
 
     const myCustomLabels = {
       docs: "data",
