@@ -7,6 +7,7 @@ import authRouter from "./src/routers/auth.js";
 import cateRouter from "./src/routers/category.js";
 import productRouter from "./src/routers/product.js";
 import uploadRouter from "./src/routers/upload.js";
+import userRouter from "./src/routers/user.js";
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -25,6 +26,7 @@ app.use("/api", productRouter);
 app.use("/api", authRouter);
 app.use("/api", cateRouter);
 app.use("/api", uploadRouter);
+app.use("/api", userRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

@@ -6,7 +6,9 @@ import {
   editProduct,
   deleteProduct,
 } from "../controllers/product.js";
-import { checkPermission } from "../middlewares/checkPermission.js";
+// import { checkPermission } from "../middlewares/checkPermission.js";
+import { authenticate } from "../middlewares/authenticate.js";
+import { authorization } from "../middlewares/authorization.js";
 
 const router = Router();
 
@@ -17,12 +19,12 @@ router.get("/products", getProducts);
 router.get("/products/:id", getProduct);
 
 // Thêm sản phẩm
-router.post("/products", checkPermission, addProduct);
+router.post("/products", authenticate, authorization ,addProduct);
 
 // Sửa sản phẩm
-router.put("/products/:id", checkPermission, editProduct);
+router.put("/products/:id", authenticate, authorization ,editProduct);
 
 // Xóa sản phẩm
-router.delete("/products/:id", checkPermission, deleteProduct);
+router.delete("/products/:id", authenticate, authorization ,deleteProduct);
 
 export default router;
