@@ -14,7 +14,7 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 router.post("/images/upload", upload.array("image", 5), uploadImage);
 router.put("/images/:publicId", upload.array("image", 5), updateImage);
