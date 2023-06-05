@@ -17,16 +17,13 @@ export const getProducts = async (req, res) => {
     } = req.query;
 
     let query = {};
-    if (_searchText) {
+    if (_searchText || (_minPrice && _maxPrice)) {
       query = {
         $text: {
           $search: _searchText,
           $caseSensitive: false,
           $diacriticSensitive: false,
         },
-      };
-    } else if (_minPrice && _maxPrice) {
-      query = {
         price: { $gte: _minPrice, $lte: _maxPrice },
       };
     }
