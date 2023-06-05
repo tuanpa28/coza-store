@@ -20,7 +20,7 @@ interface IAddProductPage {
   categories: ICategory[];
 }
 
-const AddProductPage = ({ onHandleCreate, categories }: IAddProductPage) => {
+const AddProductPage = ({ categories }: IAddProductPage) => {
   const selectOptions = categories?.map((cate) => {
     return { label: `${cate.name}`, value: `${cate._id}` };
   });
@@ -35,13 +35,13 @@ const AddProductPage = ({ onHandleCreate, categories }: IAddProductPage) => {
     required: "${label} is required!",
   };
 
-  const onFinish = (values: IProduct) => {
-    // const newImages = values?.image?.fileList?.map(({ response }: any) => {
-    //   return { url: response.urls[0].url, publicId: response.urls[0].publicId };
-    // });
-    const newValues = { ...values, image: "" };
-    onHandleCreate(newValues);
-  };
+  // const onFinish = (values: IProduct) => {
+  //   // const newImages = values?.image?.fileList?.map(({ response }: any) => {
+  //   //   return { url: response.urls[0].url, publicId: response.urls[0].publicId };
+  //   // });
+  //   // const newValues = { ...values, image: "" };
+  //   // onHandleCreate(newValues);
+  // };
 
   const props: UploadProps = {
     listType: "picture",
@@ -68,7 +68,7 @@ const AddProductPage = ({ onHandleCreate, categories }: IAddProductPage) => {
     <Form
       {...layout}
       name="nest-messages"
-      onFinish={onFinish}
+      // onFinish={onFinish}
       style={{ maxWidth: 800 }}
       validateMessages={validateMessages}
     >
