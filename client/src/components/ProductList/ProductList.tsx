@@ -12,6 +12,29 @@ interface IProductList {
 const ProductList = ({ title, className }: IProductList) => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [isClicked, setIsClicked] = useState<boolean>(false);
+  const [isShowFilter, setIsShowFilter] = useState<boolean>(false);
+  const [isShowSearch, setIsShowSearch] = useState<boolean>(false);
+  const [searchText, setSearchText] = useState("");
+
+  const searchParams = new URLSearchParams(window.location.search);
+
+  const onHandleSearchByName = (value: string) => {
+    searchParams.set("_searchText", value);
+    window.location.href = `${window.location.origin}?${searchParams}`;
+  };
+
+  const onHandleSortByPrice = (value: string) => {
+    searchParams.set("_order", value);
+    window.location.href = `${window.location.origin}?${searchParams}`;
+  };
+  const onHandleFilterPrice = (minPrice: string, maxPrice: string) => {
+    searchParams.set("_minPrice", minPrice);
+    searchParams.set("_maxPrice", maxPrice);
+    window.location.href = `${window.location.origin}?${searchParams}`;
+  };
+  const onHandleGetAll = () => {
+    window.location.href = `${window.location.origin}`;
+  };
 
   // Get Products
   useEffect(() => {
@@ -19,7 +42,7 @@ const ProductList = ({ title, className }: IProductList) => {
       try {
         const {
           data: { products },
-        } = await getProducts();
+        } = await getProducts(window.location.search);
         setProducts(products.data);
       } catch (error) {
         console.log(error);
@@ -52,15 +75,116 @@ const ProductList = ({ title, className }: IProductList) => {
             </div>
             <div className="icon-list-title-product">
               <div>
-                <button>
+                <button onClick={() => setIsShowFilter(!isShowFilter)}>
                   <i className="fa-solid fa-filter"></i>Filter
                 </button>
               </div>
               <div>
-                <button>
+                <button onClick={() => setIsShowSearch(!isShowSearch)}>
                   <i className="fa-solid fa-magnifying-glass"></i>Search
                 </button>
               </div>
+            </div>
+          </div>
+          <div
+            className={`w-full pb-[15px] pt-[10px] duration-300 ${
+              !isShowSearch && "hidden"
+            }`}
+          >
+            <div className="rounded-sm flex pl-[15px] border-solid border-[#e6e6e6] border">
+              <button
+                onClick={() => onHandleSearchByName(searchText)}
+                className="w-[38px] h-[60px] text-[#333]"
+              >
+                <i className="fa-solid fa-magnifying-glass"></i>
+              </button>
+              <input
+                type="text"
+                value={searchText}
+                onChange={(event) => setSearchText(event.target.value)}
+                className=" h-[60px] text-[#333] text-base pr-[15px]"
+                placeholder="Search"
+              />
+            </div>
+          </div>
+          {/* filter */}
+          <div className={`mt-10 ${!isShowFilter && "hidden"}`}>
+            <div className="bg-[#f2f2f2] flex-wrap flex w-full pr-[40px] pl-[40px] pt-[27px]">
+              <div className="w-[27%] pr-[15px] pb-[27px]">
+                <div className="text-[#333] text-base pb-[15px]">Sort By</div>
+                <ul>
+                  <li className="pb-[6px]">
+                    <a
+                      onClick={() => onHandleGetAll()}
+                      className="text-[#aaa] text-sm border-b border-solid border-transparent cursor-pointer"
+                    >
+                      Default
+                    </a>
+                  </li>
+                  <li className="pb-[6px]">
+                    <a
+                      onClick={() => onHandleSortByPrice("asc")}
+                      className="text-[#aaa] text-sm border-b border-solid border-transparent cursor-pointer"
+                    >
+                      Price: Low to High
+                    </a>
+                  </li>
+                  <li className="pb-[6px]">
+                    <a
+                      onClick={() => onHandleSortByPrice("desc")}
+                      className="text-[#aaa] text-sm border-b border-solid border-transparent cursor-pointer"
+                    >
+                      Price: High to Low
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div className="w-[27%] pr-[15px] pb-[27px]">
+                <div className="text-[#333] text-base pb-[15px]">Price</div>
+                <ul>
+                  <li className="pb-[6px]">
+                    <a
+                      onClick={() => onHandleGetAll()}
+                      className="text-[#aaa] text-sm border-b border-solid border-transparent cursor-pointer"
+                    >
+                      All
+                    </a>
+                  </li>
+                  <li className="pb-[6px]">
+                    <a
+                      onClick={() => onHandleFilterPrice("0", "200")}
+                      className="text-[#aaa] text-sm border-b border-solid border-transparent cursor-pointer"
+                    >
+                      0 - 200
+                    </a>
+                  </li>
+                  <li className="pb-[6px]">
+                    <a
+                      onClick={() => onHandleFilterPrice("200", "400")}
+                      className="text-[#aaa] text-sm border-b border-solid border-transparent cursor-pointer"
+                    >
+                      200 - 400
+                    </a>
+                  </li>
+                  <li className="pb-[6px]">
+                    <a
+                      onClick={() => onHandleFilterPrice("400", "600")}
+                      className="text-[#aaa] text-sm border-b border-solid border-transparent cursor-pointer"
+                    >
+                      400 - 600
+                    </a>
+                  </li>
+                  <li className="pb-[6px]">
+                    <a
+                      onClick={() => onHandleFilterPrice("600", "800")}
+                      className="text-[#aaa] text-sm border-b border-solid border-transparent cursor-pointer"
+                    >
+                      600 - 800
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div></div>
             </div>
           </div>
         </div>
@@ -68,7 +192,7 @@ const ProductList = ({ title, className }: IProductList) => {
         <div className="list-product">
           {products?.map(
             (product): JSX.Element => (
-             <>
+              <>
                 <div className="product">
                   <div className="img-product">
                     <img src={product.image.url} alt="" />
@@ -78,7 +202,9 @@ const ProductList = ({ title, className }: IProductList) => {
                   </div>
                   <div className="title-list-product">
                     <div className="sup-title-list-product">
-                      <Link to={`/products/${product._id}`}>{product.name}</Link>
+                      <Link to={`/products/${product._id}`}>
+                        {product.name}
+                      </Link>
                       <span>${product.price}</span>
                     </div>
                     <div className="">
@@ -88,8 +214,7 @@ const ProductList = ({ title, className }: IProductList) => {
                     </div>
                   </div>
                 </div>
-            
-             </>
+              </>
             )
           )}
 
