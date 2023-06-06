@@ -41,7 +41,7 @@ const AddCategoryPage = ({ onHandleCreateCategory }: IAddCategoryPage) => {
       </Form.Item>
 
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-        <Button size="large" type="primary" htmlType="submit">
+        <Button size="large"  htmlType="submit">
           Thêm danh mục
         </Button>
       </Form.Item>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import IProduct from "../../../interfaces/product";
 import ICategory from "../../../interfaces/category";
 import {
@@ -20,7 +21,7 @@ interface IAddProductPage {
   categories: ICategory[];
 }
 
-const AddProductPage = ({ categories }: IAddProductPage) => {
+const AddProductPage = ({ onHandleCreate, categories }: IAddProductPage) => {
   const selectOptions = categories?.map((cate) => {
     return { label: `${cate.name}`, value: `${cate._id}` };
   });
@@ -35,19 +36,43 @@ const AddProductPage = ({ categories }: IAddProductPage) => {
     required: "${label} is required!",
   };
 
-  // const onFinish = (values: IProduct) => {
-  //   // const newImages = values?.image?.fileList?.map(({ response }: any) => {
-  //   //   return { url: response.urls[0].url, publicId: response.urls[0].publicId };
-  //   // });
-  //   // const newValues = { ...values, image: "" };
-  //   // onHandleCreate(newValues);
-  // };
+  const onFinish = (values: any) => {
+    const newImages = values?.image?.fileList?.map(({ response }: any) => {
+      return { url: response.urls[0].url, publicId: response.urls[0].publicId };
+    });
+    const newAlbum = values.album.fileList.map(({ response }: any) => {
+      return { url: response.urls[0].url, publicId: response.urls[0].publicId };
+    });
+
+    const newValues = { ...values, image: newImages[0], album: newAlbum };
+
+    onHandleCreate(newValues);
+  };
 
   const props: UploadProps = {
     listType: "picture",
     name: "image",
+    action: "https://coza-store-be.vercel.app/api/images/upload",
+    onChange(info) {
+      const { status } = info.file;
+      if (status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (status === "done") {
+        message.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    onDrop(e) {
+      console.log("Dropped files", e.dataTransfer.files);
+    },
+  };
+  const props2: UploadProps = {
+    listType: "picture",
+    name: "image",
     multiple: true,
-    action: "http://localhost:8080/api/images/upload",
+    action: "https://coza-store-be.vercel.app/api/images/upload",
     onChange(info) {
       const { status } = info.file;
       if (status !== "uploading") {
@@ -68,7 +93,7 @@ const AddProductPage = ({ categories }: IAddProductPage) => {
     <Form
       {...layout}
       name="nest-messages"
-      // onFinish={onFinish}
+      onFinish={onFinish}
       style={{ maxWidth: 800 }}
       validateMessages={validateMessages}
     >
@@ -100,6 +125,24 @@ const AddProductPage = ({ categories }: IAddProductPage) => {
         <Dragger {...props}>
           <Button icon={<UploadOutlined />}>Upload Image</Button>
         </Dragger>
+      </Form.Item>
+
+      <Form.Item name="album" label="Album" rules={[{ required: true }]}>
+        <Dragger {...props2}>
+          <Button icon={<UploadOutlined />}>Upload Album</Button>
+        </Dragger>
+      </Form.Item>
+
+      <Form.Item
+        name="quantity"
+        label="Quantity"
+        rules={[{ required: true, type: "number", min: 0 }]}
+      >
+        <InputNumber
+          size="large"
+          placeholder="Product Quantity"
+          style={{ width: "100%" }}
+        />
       </Form.Item>
 
       <Form.Item

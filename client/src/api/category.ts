@@ -15,19 +15,19 @@ const getCategories = () => {
 };
 
 const getCategory = (id: string) => {
-  return instance.get(`category/${id}`);
+  return instance.get(`categories/${id}`);
 };
 
 const createCategory = (category: ICategory) => {
-  return instance.post(`category`, category, options());
+  return instance.post(`categories`, category, options());
 };
 
 const updateCategory = (category: ICategory) => {
-  return instance.put(`category/${category._id}`, category, options());
+  return instance.put(`categories/${category._id}`, category, options());
 };
 
 const deleteCategory = (id: string) => {
-  return instance.delete(`category/${id}`, options());
+  return instance.delete(`categories/${id}`, options());
 };
 
 export {

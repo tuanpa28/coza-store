@@ -1,10 +1,10 @@
 import Cookies from "js-cookie";
 import { Link, Navigate, Outlet } from "react-router-dom";
 import React, { useState } from "react";
-import { MenuProps, MenuTheme } from "antd";
+import { MenuProps } from "antd";
 import { Breadcrumb, Layout, Menu,
   //  theme,
-   Switch, message } from "antd";
+    message } from "antd";
 const { Content, Footer, Sider } = Layout;
 import {
   AppstoreOutlined,
@@ -47,22 +47,16 @@ const items: MenuItem[] = [
 ];
 
 const AdminLayout = () => {
-  const [themeM, setThemeM] = useState<MenuTheme>("dark");
   const [current, setCurrent] = useState("1");
   const [collapsed, setCollapsed] = useState(false);
 
-  const changeTheme = (value: boolean) => {
-    setThemeM(value ? "dark" : "light");
-  };
+  
 
   const onClick: MenuProps["onClick"] = (e) => {
     setCurrent(e.key);
   };
 
-  // const {
-  //   token: { colorBgContainer },
-  // } = theme.useToken();
-
+ 
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
@@ -86,15 +80,9 @@ const AdminLayout = () => {
           </Link>
         </div>
 
-        <Switch
-          style={{ marginLeft: 10 }}
-          checked={themeM === "dark"}
-          onChange={changeTheme}
-          checkedChildren="Dark"
-          unCheckedChildren="Light"
-        />
+       
         <Menu
-          theme={themeM}
+          theme={"dark"}
           onClick={onClick}
           defaultOpenKeys={["sub1"]}
           selectedKeys={[current]}

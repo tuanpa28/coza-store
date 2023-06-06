@@ -60,7 +60,7 @@ const SigninPage = () => {
       <Form.Item>
         <Button
           size="large"
-          type="primary"
+          // type="primary"
           htmlType="submit"
           className="login-form-button"
           style={{ width: "100%" }}

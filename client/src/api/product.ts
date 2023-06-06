@@ -15,19 +15,19 @@ const getProducts = (opctions?: string) => {
 };
 
 const getProduct = (id: string) => {
-  return instance.get(`product/${id}`);
+  return instance.get(`products/${id}`);
 };
 
 const createProduct = (product: IProduct) => {
-  return instance.post(`product`, product, options());
+  return instance.post(`products`, product, options());
 };
 
 const updateProduct = (product: IProduct) => {
-  return instance.put(`product/${product._id}`, product, options());
+  return instance.put(`products/${product._id}`, product, options());
 };
 
 const deleteProduct = (id: string) => {
-  return instance.delete(`product/${id}`, options());
+  return instance.delete(`products/${id}`, options());
 };
 
 export { getProducts, getProduct, createProduct, updateProduct, deleteProduct };

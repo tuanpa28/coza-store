@@ -27,7 +27,6 @@ const CategoryManagementPage = ({
 
   const confirm = (id: string) => {
     onHandleRemoveCategory(id);
-    message.success(`Xóa danh mục thành công!`);
   };
 
   const cancel = () => {

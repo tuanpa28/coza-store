@@ -56,7 +56,7 @@ function App() {
         const {
           data: { categories },
         } = await getCategories();
-        setCategories(categories);
+        setCategories(categories.data);
       } catch (error) {
         console.log(error);
       }
@@ -80,8 +80,8 @@ function App() {
   // Create Product
   const onHandleCreate = async (product: IProduct) => {
     try {
-      product.price = +product.price;
       const { data } = await createProduct(product);
+
       setProducts([...products, data?.product]);
       message.success(`Thêm sản phẩm thành công!`);
       navigate("/admin/products");
@@ -94,7 +94,7 @@ function App() {
   const onHandleCreateCategory = async (category: ICategory) => {
     try {
       const { data } = await createCategory(category);
-      setCategories([...categories, data?.category]);
+      setCategories([...categories, data.category]);
       message.success(`Thêm danh mục thành công!`);
       navigate("/admin/category");
     } catch (error) {
@@ -105,7 +105,6 @@ function App() {
   // Update Product
   const onHandleUpdate = async (product: IProduct) => {
     try {
-      product.price = +product.price;
       const { data } = await updateProduct(product);
       const newPro = products?.map((item) =>
         item._id === data?.product?._id ? data.product : item
@@ -139,7 +138,9 @@ function App() {
       const { data } = await deleteProduct(id);
       // call api xóa image
 
-      data.product.image.map(
+      await deleteImages(data.product.image.publicId);
+
+      data.product.album.map(
         async (item: { url: string; publicId: string }) =>
           await deleteImages(item.publicId)
       );
@@ -155,6 +156,7 @@ function App() {
   const onHandleRemoveCategory = async (id: string) => {
     try {
       await deleteCategory(id);
+      message.success(`Xóa danh mục thành công!`);
       const newCate = categories?.filter((category) => category._id !== id);
       setCategories(newCate);
     } catch (error) {
@@ -173,8 +175,8 @@ function App() {
               index
               element={
                 <ProductsPage
-                //  products={products} searchParams={searchParams} 
-                 />
+                //  products={products} searchParams={searchParams}
+                />
               }
             />
             {/* Product detail */}

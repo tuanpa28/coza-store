@@ -12,7 +12,7 @@ const SignupPage = () => {
       await signup(values);
       message.success("Đăng ký thành công!");
       navigate("/signin");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch ({ response }: any) {
       notification.error({
         message: response.data.message,
@@ -70,7 +70,7 @@ const SignupPage = () => {
       <Form.Item>
         <Button
           size="large"
-          type="primary"
+          // type="primary"
           htmlType="submit"
           className="login-form-button"
           style={{ width: "100%" }}

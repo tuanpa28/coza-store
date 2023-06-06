@@ -16,10 +16,10 @@ const HeaderComponent = () => {
     navigate("/");
   };
   const items: MenuProps["items"] = [
-    {
-      label: <a>Tài khoản</a>,
-      key: "0",
-    },
+    // {
+    //   label: <a>Tài khoản</a>,
+    //   key: "0",
+    // },
     {
       label: <Link to={"/"}>Trang chủ</Link>,
       key: "1",

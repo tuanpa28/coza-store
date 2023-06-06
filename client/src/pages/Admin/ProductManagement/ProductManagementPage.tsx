@@ -28,10 +28,6 @@ const ProductManagementPage = ({
 
   const [searchText, setSearchText] = useState("");
 
-  const cateFilter = categories?.map((cate) => {
-    return { text: `${cate.name}`, value: `${cate._id}` };
-  });
-
   const confirm = (idProduct: string) => {
     onHandleRemove(idProduct);
     message.success(`Xóa sản phẩm thành công!`);
@@ -52,7 +48,7 @@ const ProductManagementPage = ({
       title: "Image",
       dataIndex: "image",
       key: "image",
-      render: (image) => <img width={50} src={image[0].url} />,
+      render: (image) => <img width={50} src={image.url} />,
     },
     {
       title: "Price",
@@ -71,6 +67,13 @@ const ProductManagementPage = ({
       },
     },
     {
+      title: "Quantity",
+      dataIndex: "quantity",
+      key: "quantity",
+      defaultSortOrder: "descend",
+      sorter: (a, b) => a.quantity - b.quantity,
+    },
+    {
       title: "Category",
       key: "category",
       dataIndex: "categoryId",
@@ -81,11 +84,6 @@ const ProductManagementPage = ({
           )}
         </span>
       ),
-      filters: [...cateFilter],
-      // onFilter: (value: any, record: IProduct) =>
-      //   record?.categoryId?.startsWith(value),
-      // filterMode: "tree",
-      // filterSearch: true,
     },
     {
       title: "Action",

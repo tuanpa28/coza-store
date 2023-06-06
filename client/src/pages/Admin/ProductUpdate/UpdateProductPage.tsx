@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -8,6 +9,8 @@ import {
   Spin,
   Typography,
   Upload,
+  UploadProps,
+  message,
 } from "antd";
 import { useParams } from "react-router-dom";
 import ICategory from "../../../interfaces/category";
@@ -33,15 +36,14 @@ const UpdateProductPage = ({
   const { id } = useParams();
   const product = products?.find((product) => product._id === id);
   const [form] = Form.useForm();
-  // const cateId = product?.categoryId?._id
-  //   ? product?.categoryId?._id
-  //   : product?.categoryId;
 
   form.setFieldsValue({
     _id: product?._id,
     name: product?.name,
     price: product?.price,
     image: product?.image,
+    album: product?.album,
+    quantity: product?.quantity,
     description: product?.description,
     categoryId: product?.categoryId,
   });
@@ -59,19 +61,63 @@ const UpdateProductPage = ({
     required: "${label} is required!",
   };
 
-  const onFinish = (values: IProduct) => {
-    // if (values?.image?.fileList) {
-    //   const newImages = values?.image?.fileList?.map(({ response }: any) => {
-    //     return {
-    //       url: response.urls[0].url,
-    //       publicId: response.urls[0].publicId,
-    //     };
-    //   });
-    //   const newValues = { ...values, image: newImages };
-    //   onHandleUpdate(newValues);
-    // } else {
-      onHandleUpdate(values);
-    // }
+  const onFinish = (values: any) => {
+    let newImages;
+    let newAlbum;
+    let check = false;
+
+    if (!values?.image?.url) {
+      check = true;
+      newImages = values?.image?.fileList?.map(({ response }: any) => {
+        return {
+          url: response.urls[0].url,
+          publicId: response.urls[0].publicId,
+        };
+      });
+    } else {
+      newImages = [{ url: values.image.url, publicId: values.image.publicId }];
+    }
+    if (values?.album.file) {
+      check = true;
+      newAlbum = values.album.fileList.map(({ response }: any) => {
+        return {
+          url: response.urls[0].url,
+          publicId: response.urls[0].publicId,
+        };
+      });
+    } else {
+      newAlbum = values.album;
+    }
+
+    const newValues = check
+      ? { ...values, image: newImages[0], album: newAlbum }
+      : {
+          ...values,
+          image: { url: values.image.url, publicId: values.image.publicId },
+        };
+
+    onHandleUpdate(newValues);
+  };
+
+  const props2: UploadProps = {
+    listType: "picture",
+    name: "image",
+    multiple: true,
+    action: "https://coza-store-be.vercel.app/api/images/upload",
+    onChange(info) {
+      const { status } = info.file;
+      if (status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (status === "done") {
+        message.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    onDrop(e) {
+      console.log("Dropped files", e.dataTransfer.files);
+    },
   };
 
   return (
@@ -109,10 +155,27 @@ const UpdateProductPage = ({
           name="image"
           action="http://localhost:8080/api/images/upload"
           listType="picture"
-          multiple
         >
           <Button icon={<UploadOutlined />}>Upload Image</Button>
         </Dragger>
+      </Form.Item>
+
+      <Form.Item name="album" label="Album" rules={[{ required: true }]}>
+        <Dragger {...props2}>
+          <Button icon={<UploadOutlined />}>Upload Album</Button>
+        </Dragger>
+      </Form.Item>
+
+      <Form.Item
+        name="quantity"
+        label="Quantity"
+        rules={[{ required: true, type: "number", min: 0 }]}
+      >
+        <InputNumber
+          size="large"
+          placeholder="Product Quantity"
+          style={{ width: "100%" }}
+        />
       </Form.Item>
 
       <Form.Item
