@@ -3,6 +3,7 @@ import { getProducts } from "../../api/product";
 import IProduct from "../../interfaces/product";
 import { Link } from "react-router-dom";
 import ProductDetailSub from "./ProductDetailSub/ProductDetailSub";
+import { useNavigate } from "react-router-dom";
 
 interface IProductList {
   title?: string;
@@ -15,25 +16,29 @@ const ProductList = ({ title, className }: IProductList) => {
   const [isShowFilter, setIsShowFilter] = useState<boolean>(false);
   const [isShowSearch, setIsShowSearch] = useState<boolean>(false);
   const [searchText, setSearchText] = useState("");
+  const navigate = useNavigate();
 
-  const searchParams = new URLSearchParams(window.location.search);
+  const urlParams = new URLSearchParams(location.search);
+  const queryString = `${
+    urlParams.toString() ? `?${urlParams.toString()}` : ""
+  }`;
 
-  const onHandleSearchByName = (value: string) => {
-    searchParams.set("_searchText", value);
-    window.location.href = `${window.location.origin}?${searchParams}`;
+  const onHandleSearchByName = () => {
+    urlParams.set("_searchText", encodeURIComponent(searchText));
+    navigate(`?${urlParams}`);
   };
 
   const onHandleSortByPrice = (value: string) => {
-    searchParams.set("_order", value);
-    window.location.href = `${window.location.origin}?${searchParams}`;
+    urlParams.set("_order", encodeURIComponent(value));
+    navigate(`?${urlParams}`);
   };
   const onHandleFilterPrice = (minPrice: string, maxPrice: string) => {
-    searchParams.set("_minPrice", minPrice);
-    searchParams.set("_maxPrice", maxPrice);
-    window.location.href = `${window.location.origin}?${searchParams}`;
+    urlParams.set("_minPrice", encodeURIComponent(minPrice));
+    urlParams.set("_maxPrice", encodeURIComponent(maxPrice));
+    navigate(`?${urlParams}`);
   };
   const onHandleGetAll = () => {
-    window.location.href = `${window.location.origin}`;
+    navigate(window.location.pathname);
   };
 
   // Get Products
@@ -42,13 +47,13 @@ const ProductList = ({ title, className }: IProductList) => {
       try {
         const {
           data: { products },
-        } = await getProducts(window.location.search);
+        } = await getProducts(queryString);
         setProducts(products.data);
       } catch (error) {
         console.log(error);
       }
     })();
-  }, []);
+  }, [queryString]);
 
   const handleShowProductDetail = () => {
     setIsClicked(!isClicked);
@@ -59,7 +64,7 @@ const ProductList = ({ title, className }: IProductList) => {
       <div className={`pb-35 pt-6 ${className}`}>
         <div className="title-product">
           {title && (
-            <div className="sup-title-product">
+            <div style={{ marginBottom: "16px" }} className="sup-title-product">
               <h2>{title}</h2>
             </div>
           )}
@@ -93,7 +98,7 @@ const ProductList = ({ title, className }: IProductList) => {
           >
             <div className="rounded-sm flex pl-[15px] border-solid border-[#e6e6e6] border">
               <button
-                onClick={() => onHandleSearchByName(searchText)}
+                onClick={onHandleSearchByName}
                 className="w-[38px] h-[60px] text-[#333]"
               >
                 <i className="fa-solid fa-magnifying-glass"></i>
@@ -115,7 +120,7 @@ const ProductList = ({ title, className }: IProductList) => {
                 <ul>
                   <li className="pb-[6px]">
                     <a
-                      onClick={() => onHandleGetAll()}
+                      onClick={onHandleGetAll}
                       className="text-[#aaa] text-sm border-b border-solid border-transparent cursor-pointer"
                     >
                       Default
@@ -144,7 +149,7 @@ const ProductList = ({ title, className }: IProductList) => {
                 <ul>
                   <li className="pb-[6px]">
                     <a
-                      onClick={() => onHandleGetAll()}
+                      onClick={onHandleGetAll}
                       className="text-[#aaa] text-sm border-b border-solid border-transparent cursor-pointer"
                     >
                       All

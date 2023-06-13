@@ -19,10 +19,6 @@ import AdminLayout from "./components/Layouts/AdminLayout/adminLayout";
 import BaseLayout from "./components/Layouts/BaseLayout/baseLayout";
 import ICategory from "./interfaces/category";
 import IProduct from "./interfaces/product";
-import {
-  default as AboutPage,
-  default as BlogsPage,
-} from "./pages/About/AboutPage";
 import AddCategoryPage from "./pages/Admin/CategoryAdd/AddCategoryPage";
 import CategoryManagementPage from "./pages/Admin/CategoryManagement/CategoryManagementPage";
 import UpdateCategoryPage from "./pages/Admin/CategoryUpdate/UpdateCategoryPage";
@@ -39,15 +35,13 @@ import ProductDetailPage from "./pages/ProductDetail/ProductDetailPage";
 import ProductsPage from "./pages/Products/ProductsPage";
 import SigninPage from "./pages/Signin/SigninPage";
 import SignupPage from "./pages/Signup/SignupPage";
+import AboutPage from "./pages/About/AboutPage";
+import BlogsPage from "./pages/Blog/BlogsPage";
 
 function App() {
   const navigate = useNavigate();
   const [products, setProducts] = useState<IProduct[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
-
-  const search = window.location.search;
-
-  // const searchParams = new URLSearchParams(search);
 
   // Get Categories
   useEffect(() => {
@@ -69,13 +63,13 @@ function App() {
       try {
         const {
           data: { products },
-        } = await getProducts(search);
+        } = await getProducts();
         setProducts(products.data);
       } catch (error) {
         console.log(error);
       }
     })();
-  }, [search]);
+  }, []);
 
   // Create Product
   const onHandleCreate = async (product: IProduct) => {

@@ -1,4 +1,3 @@
-
 const Categories = () => {
   return (
     <div className="mx-auto-300 product-object">
@@ -11,7 +10,7 @@ const Categories = () => {
         </div>
         <a href="./product.html">
           <div className="textsup-product-object">
-            <div>
+            <div style={{ marginTop: "30px" }}>
               <h4>Women</h4>
               <p>Spring 2018</p>
             </div>
@@ -31,7 +30,7 @@ const Categories = () => {
         </div>
         <a href="./product.html">
           <div className="textsup-product-object">
-            <div>
+            <div style={{ marginTop: "30px" }}>
               <h4>Men</h4>
               <p>Spring 2018</p>
             </div>
@@ -51,7 +50,7 @@ const Categories = () => {
         </div>
         <a href="./product.html">
           <div className="textsup-product-object">
-            <div>
+            <div style={{ marginTop: "30px" }}>
               <h4>Accessories</h4>
               <p>New Trend</p>
             </div>

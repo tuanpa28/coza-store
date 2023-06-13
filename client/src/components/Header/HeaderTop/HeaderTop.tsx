@@ -97,11 +97,11 @@ const HeaderTop = ({ className }: IHeaderTop) => {
                 <i className="fa-solid fa-heart"></i>
               </a>
             </div>
-            <div className="sub-dark-sun">
+            {/* <div className="sub-dark-sun">
               <button id="dark-sun">
                 <i className="fa-solid fa-sun"></i>
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </nav>

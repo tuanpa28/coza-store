@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import HeaderTop from "./HeaderTop/HeaderTop";
 
 const Header = () => {
@@ -16,7 +17,7 @@ const Header = () => {
           <div className="test">
             <h3>Men Collection 2018</h3>
             <h1>NEW ARRIVALS</h1>
-            <a href="./product.html">SHOP NOW</a>
+            <Link to={"/products"}>SHOP NOW</Link>
           </div>
         </div>
       </div>
