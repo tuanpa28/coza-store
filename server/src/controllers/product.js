@@ -84,7 +84,10 @@ export const getProduct = async (req, res) => {
           {
             path: "categoryId",
             select: "name",
-            // populate: { path: "productId", select: "name" },
+            populate: {
+              path: "productId",
+              select: "name price image album quantity description categoryId",
+            },
           },
         ]
       : [];

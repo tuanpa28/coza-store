@@ -67,7 +67,7 @@ export const getCategory = async (req, res) => {
       ? [
           {
             path: "productId",
-            select: "name",
+            select: "name price image album quantity description categoryId",
             // populate: { path: "categoryId", select: "name" },
           },
         ]
