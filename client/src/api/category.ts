@@ -15,7 +15,7 @@ const getCategories = () => {
 };
 
 const getCategory = (id: string) => {
-  return instance.get(`categories/${id}`);
+  return instance.get(`categories/${id}?_embed=products`);
 };
 
 const createCategory = (category: ICategory) => {

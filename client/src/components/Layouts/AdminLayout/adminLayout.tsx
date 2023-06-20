@@ -2,9 +2,13 @@ import Cookies from "js-cookie";
 import { Link, Navigate, Outlet } from "react-router-dom";
 import React, { useState } from "react";
 import { MenuProps } from "antd";
-import { Breadcrumb, Layout, Menu,
+import {
+  Breadcrumb,
+  Layout,
+  Menu,
   //  theme,
-    message } from "antd";
+  message,
+} from "antd";
 const { Content, Footer, Sider } = Layout;
 import {
   AppstoreOutlined,
@@ -50,13 +54,10 @@ const AdminLayout = () => {
   const [current, setCurrent] = useState("1");
   const [collapsed, setCollapsed] = useState(false);
 
-  
-
   const onClick: MenuProps["onClick"] = (e) => {
     setCurrent(e.key);
   };
 
- 
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
@@ -80,7 +81,6 @@ const AdminLayout = () => {
           </Link>
         </div>
 
-       
         <Menu
           theme={"dark"}
           onClick={onClick}

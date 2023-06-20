@@ -1,10 +1,27 @@
+import IProduct from "../../../interfaces/product";
+import { useEffect, useState } from "react";
 
 interface IProductDetailSub {
+  products: IProduct[];
+  productId: string;
   isClicked: boolean;
   handleShowProductDetail: () => void;
 }
 
-const ProductDetailSub = ({ isClicked, handleShowProductDetail }: IProductDetailSub) => {
+const ProductDetailSub = ({
+  isClicked,
+  productId,
+  products,
+  handleShowProductDetail,
+}: IProductDetailSub) => {
+  const [product, setProduct] = useState<IProduct>();
+  console.log(product);
+
+  useEffect(() => {
+    const currentPro = products?.find((product) => product._id === productId);
+    setProduct(currentPro);
+  }, [products, productId]);
+
   return (
     <div
       id="app"
@@ -24,31 +41,15 @@ const ProductDetailSub = ({ isClicked, handleShowProductDetail }: IProductDetail
         <div className="all-img-detail">
           <div className="sup-img-detail">
             <ul>
-              <li>
-                <img
-                  src="https://res.cloudinary.com/dugodumc5/image/upload/v1685293341/coza-store/sn6sgoahfrs1fiywbzsi.webp"
-                  alt=""
-                />
-              </li>
-              <li>
-                <img
-                  src="https://res.cloudinary.com/dugodumc5/image/upload/v1685293264/coza-store/avydaud8d4vnfxb1s5s1.webp"
-                  alt=""
-                />
-              </li>
-              <li>
-                <img
-                  src="https://res.cloudinary.com/dugodumc5/image/upload/v1685293263/coza-store/bmoqn62vbcogzi5pyqbc.webp"
-                  alt=""
-                />
-              </li>
+              {product?.album.map((item) => (
+                <li>
+                  <img src={item?.url} alt="" />
+                </li>
+              ))}
             </ul>
           </div>
           <div className="img-detail">
-            <img
-              src="https://res.cloudinary.com/dugodumc5/image/upload/v1685294639/coza-store/gzxl3ycytfdbrjonzbhu.webp"
-              alt=""
-            />
+            <img src={product?.image?.url} alt="" />
             <a href="">
               <i className="fa-solid fa-up-right-and-down-left-from-center"></i>
             </a>
@@ -63,13 +64,10 @@ const ProductDetailSub = ({ isClicked, handleShowProductDetail }: IProductDetail
           </div>
         </div>
         {/* <!--end all-img-detail--> */}
-        <div className="content-img-detail">
-          <h4>Lightweight Jacket</h4>
-          <span>$58.79</span>
-          <p>
-            Nulla eget sem vitae eros pharetra viverra. Nam vitae luctus ligula.
-            Mauris consequat ornare feugiat.
-          </p>
+        <div style={{ width: "100%" }} className="content-img-detail">
+          <h4>{product?.name}</h4>
+          <span>${product?.price}</span>
+          <p>{product?.description}</p>
           <div className="all-choose">
             <div className="choose">
               <h5>Size</h5>

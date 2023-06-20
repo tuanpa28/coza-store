@@ -6,6 +6,7 @@ import { LockOutlined, UserOutlined, MailOutlined } from "@ant-design/icons";
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  const [form] = Form.useForm();
 
   const onFinish = async (values: IUser) => {
     try {
@@ -20,9 +21,20 @@ const SignupPage = () => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const validateConfirmPassword = (_: any, value: string) => {
+    const password = form.getFieldValue("password");
+
+    if (value && value !== password) {
+      return Promise.reject(new Error("Password không khớp!"));
+    }
+    return Promise.resolve();
+  };
+
   return (
     <Form
       name="basic"
+      form={form}
       style={{ maxWidth: 350, margin: "0 auto", marginTop: 100 }}
       initialValues={{ remember: true }}
       onFinish={onFinish}
@@ -58,7 +70,13 @@ const SignupPage = () => {
       </Form.Item>
       <Form.Item
         name="confirmPassword"
-        rules={[{ required: true, message: "Vui lòng nhập Confirm Password!" }]}
+        dependencies={["password"]}
+        rules={[
+          { required: true, message: "Vui lòng nhập Confirm Password!" },
+          {
+            validator: validateConfirmPassword,
+          },
+        ]}
       >
         <Input.Password
           size="large"

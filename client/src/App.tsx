@@ -141,6 +141,7 @@ function App() {
 
       const newPro = products?.filter((product) => product._id !== id);
       setProducts(newPro);
+      message.success(`Xóa sản phẩm thành công!`);
     } catch (error) {
       console.log(error);
     }

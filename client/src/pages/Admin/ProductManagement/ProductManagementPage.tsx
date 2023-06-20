@@ -30,7 +30,6 @@ const ProductManagementPage = ({
 
   const confirm = (idProduct: string) => {
     onHandleRemove(idProduct);
-    message.success(`Xóa sản phẩm thành công!`);
   };
 
   const cancel = () => {

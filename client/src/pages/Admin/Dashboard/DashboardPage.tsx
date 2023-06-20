@@ -1,20 +1,20 @@
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { Card, Col, Row, Statistic } from "antd";
-import type { CountdownProps } from "antd";
+// import type { CountdownProps } from "antd";
 
-const { Countdown } = Statistic;
+// const { Countdown } = Statistic;
 
-const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; // Dayjs is also OK
+// const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; // Dayjs is also OK
 
-const onFinish: CountdownProps["onFinish"] = () => {
-  console.log("finished!");
-};
+// const onFinish: CountdownProps["onFinish"] = () => {
+//   console.log("finished!");
+// };
 
-const onChange: CountdownProps["onChange"] = (val) => {
-  if (typeof val === "number" && 4.95 * 1000 < val && val < 5 * 1000) {
-    console.log("changed!");
-  }
-};
+// const onChange: CountdownProps["onChange"] = (val) => {
+//   if (typeof val === "number" && 4.95 * 1000 < val && val < 5 * 1000) {
+//     console.log("changed!");
+//   }
+// };
 
 const DashboardPage = () => {
   return (
@@ -46,7 +46,7 @@ const DashboardPage = () => {
         </Col>
       </Row>
 
-      <Row style={{ width: "50%", marginLeft: 40 }} gutter={16}>
+      {/* <Row style={{ width: "50%", marginLeft: 40 }} gutter={16}>
         <Col span={12}>
           <Countdown title="Countdown" value={deadline} onFinish={onFinish} />
         </Col>
@@ -71,7 +71,7 @@ const DashboardPage = () => {
             onChange={onChange}
           />
         </Col>
-      </Row>
+      </Row> */}
     </div>
   );
 };
