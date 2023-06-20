@@ -15,7 +15,7 @@ const getProducts = (opctions?: string) => {
 };
 
 const getProduct = (id: string) => {
-  return instance.get(`products/${id}`);
+  return instance.get(`products/${id}?_expand=categories`);
 };
 
 const createProduct = (product: IProduct) => {

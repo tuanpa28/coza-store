@@ -1,28 +1,31 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import IProduct from "../../interfaces/product";
 import HeaderTop from "../../components/Header/HeaderTop/HeaderTop";
+import { getProduct } from "../../api/product";
+import ProductDetailSub from "../../components/ProductList/ProductDetailSub/ProductDetailSub";
 
-interface IProductDetailPage {
-  products: IProduct[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  handleClick?: () => void;
-}
-
-const ProductDetailPage = ({
-  products,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  handleClick = () => {},
-}: IProductDetailPage) => {
+const ProductDetailPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<IProduct>();
-
-  // const [visible, setVisible] = useState(false);
+  const [productId, setProductId] = useState("");
+  const [isClicked, setIsClicked] = useState<boolean>(false);
 
   useEffect(() => {
-    const currentPro = products?.find((product) => product._id === id);
-    setProduct(currentPro);
-  }, [products, id]);
+    (async () => {
+      try {
+        const { data } = await getProduct(id || "");
+        setProduct(data.product);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [id]);
+
+  const handleShowProductDetail = (productId?: string) => {
+    setProductId(productId || "");
+    setIsClicked(!isClicked);
+  };
 
   return (
     <>
@@ -52,10 +55,7 @@ const ProductDetailPage = ({
                   </ul>
                 </div>
                 <div className="img-detail">
-                  <img
-                    src={product?.image.url}
-                    alt=""
-                  />
+                  <img src={product?.image.url} alt="" />
                   <a href="">
                     <i className="fa-solid fa-up-right-and-down-left-from-center"></i>
                   </a>
@@ -73,9 +73,7 @@ const ProductDetailPage = ({
               <div className="content-img-detail">
                 <h4>{product?.name}</h4>
                 <span>${product?.price}</span>
-                <p>
-                 {product?.description}
-                </p>
+                <p>{product?.description}</p>
                 <div className="all-choose">
                   <div className="choose">
                     <h5>Size</h5>
@@ -168,7 +166,7 @@ const ProductDetailPage = ({
       {/* <!-- end  --> */}
       <div className="sku-cate">
         <span>SKU: JAK-01</span>
-        <span>Categories: Jacket, Men</span>
+        <span>Categories: {product?.categoryId?.name}</span>
       </div>
       {/* <!--  --> */}
       <div className="related">
@@ -180,90 +178,27 @@ const ProductDetailPage = ({
             <i className="fa-solid fa-angle-left"></i>
           </button>
           <div className="mt-13 mb-4 list-product">
-            <div className="product">
-              <div className="img-product">
-                <img
-                  src="https://res.cloudinary.com/dugodumc5/image/upload/v1685293264/coza-store/izpc8wlpywutwmlj6djf.webp"
-                  alt=""
-                />
-                <button onClick={() => handleClick()}>Quick View</button>
-              </div>
-              <div className="title-list-product">
-                <div className="sup-title-list-product">
-                  <a href="./product-detail.html">Esprit Ruffle Shirt</a>
-                  <span>$16.64</span>
+            {product?.categoryId?.productId?.map((pro: IProduct) => (
+              <div className="product">
+                <div className="img-product">
+                  <img src={pro.image.url} alt="" />
+                  <button onClick={() => handleShowProductDetail(pro._id)}>
+                    Quick View
+                  </button>
                 </div>
-                <div className="">
-                  <a href="">
-                    <i className="fa-regular fa-heart"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            {/* <!-- end product --> */}
-            <div className="product">
-              <div className="img-product">
-                <img
-                  src="https://res.cloudinary.com/dugodumc5/image/upload/v1685293263/coza-store/pp13euvwt5vvtqhyc64s.webp"
-                  alt=""
-                />
-                <button onClick={() => handleClick()}>Quick View</button>
-              </div>
-              <div className="title-list-product">
-                <div className="sup-title-list-product">
-                  <a href="./product-detail.html">Herschel supply</a>
-                  <span>$35.31</span>
-                </div>
-                <div className="">
-                  <a href="">
-                    <i className="fa-regular fa-heart"></i>
-                  </a>
+                <div className="title-list-product">
+                  <div className="sup-title-list-product">
+                    <Link to={`/products/${pro._id}`}>{pro.name}</Link>
+                    <span>${pro.price}</span>
+                  </div>
+                  <div className="">
+                    <a href="">
+                      <i className="fa-regular fa-heart"></i>
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* <!-- end product --> */}
-            <div className="product">
-              <div className="img-product">
-                <img
-                  src="https://res.cloudinary.com/dugodumc5/image/upload/v1685293263/coza-store/bmoqn62vbcogzi5pyqbc.webp"
-                  alt=""
-                />
-                <button onClick={() => handleClick()}>Quick View</button>
-              </div>
-              <div className="title-list-product">
-                <div className="sup-title-list-product">
-                  <a href="./product-detail.html">Only Check Trouser</a>
-                  <span>$25.50</span>
-                </div>
-                <div className="">
-                  <a href="">
-                    <i className="fa-regular fa-heart"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            {/* <!-- end product --> */}
-            <div className="product">
-              <div className="img-product">
-                <img
-                  src="https://res.cloudinary.com/dugodumc5/image/upload/v1685293264/coza-store/avydaud8d4vnfxb1s5s1.webp"
-                  alt=""
-                />
-                <button onClick={() => handleClick()}>Quick View</button>
-              </div>
-              <div className="title-list-product">
-                <div className="sup-title-list-product">
-                  <a href="./product-detail.html">Classic Trench Coat</a>
-                  <span>$75.00</span>
-                </div>
-                <div className="">
-                  <a href="">
-                    <i className="fa-regular fa-heart"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            {/* <!-- end product --> */}
+            ))}
           </div>
           <button className="button-right">
             <i className="fa-solid fa-angle-right"></i>
@@ -271,6 +206,12 @@ const ProductDetailPage = ({
         </div>
       </div>
       {/* <!--  --> */}
+      <ProductDetailSub
+        products={product?.categoryId?.productId}
+        productId={productId}
+        isClicked={isClicked}
+        handleShowProductDetail={handleShowProductDetail}
+      />
     </>
   );
 };

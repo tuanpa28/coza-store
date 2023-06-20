@@ -270,7 +270,7 @@ const ProductList = ({ title, className }: IProductList) => {
         </div>
       </div>
       <ProductDetailSub
-      products={products}
+        products={products}
         productId={productId}
         isClicked={isClicked}
         handleShowProductDetail={handleShowProductDetail}

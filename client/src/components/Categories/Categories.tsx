@@ -45,7 +45,7 @@ const Categories = () => {
               />
             )}
           </div>
-          <Link to={"/products"}>
+          <Link to={""}>
             <div
               // onClick={() => onHandleGetOneCategory(cate._id)}
               className="textsup-product-object"

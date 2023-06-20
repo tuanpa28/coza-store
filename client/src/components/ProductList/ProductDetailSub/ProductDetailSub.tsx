@@ -15,7 +15,6 @@ const ProductDetailSub = ({
   handleShowProductDetail,
 }: IProductDetailSub) => {
   const [product, setProduct] = useState<IProduct>();
-  console.log(product);
 
   useEffect(() => {
     const currentPro = products?.find((product) => product._id === productId);

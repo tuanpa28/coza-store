@@ -177,7 +177,7 @@ function App() {
             {/* Product detail */}
             <Route
               path=":id"
-              element={<ProductDetailPage products={products} />}
+              element={<ProductDetailPage />}
             />
           </Route>
           {/* end products */}
