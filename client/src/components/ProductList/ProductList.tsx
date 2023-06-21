@@ -7,26 +7,43 @@ import ProductDetailSub from "./ProductDetailSub/ProductDetailSub";
 import { useNavigate } from "react-router-dom";
 import { getCategories, getCategory } from "../../api/category";
 import ICategory from "../../interfaces/category";
+import "./ProductList.css";
 
 interface IProductList {
   title?: string;
   className?: string;
+  _limit?: number;
+  products: IProduct[];
+  setProducts: any;
 }
 
-const ProductList = ({ title, className }: IProductList) => {
-  const [products, setProducts] = useState<IProduct[]>([]);
+const ProductList = ({
+  title,
+  _limit,
+  className,
+  products,
+  setProducts,
+}: IProductList) => {
+  // const [products, setProducts] = useState<IProduct[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [isShowFilter, setIsShowFilter] = useState<boolean>(false);
   const [isShowSearch, setIsShowSearch] = useState<boolean>(false);
   const [searchText, setSearchText] = useState("");
   const [productId, setProductId] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [limitPro, setLimitPro] = useState(_limit || 8);
   const navigate = useNavigate();
 
   const urlParams = new URLSearchParams(location.search);
   const queryString = `${
     urlParams.toString() ? `?${urlParams.toString()}` : ""
   }`;
+
+  const onHandleLoadMore = () => {
+    setLoading(true);
+    setLimitPro(limitPro + 8);
+  };
 
   const onHandleSearchByName = () => {
     urlParams.set("_searchText", encodeURIComponent(searchText));
@@ -59,15 +76,21 @@ const ProductList = ({ title, className }: IProductList) => {
   useEffect(() => {
     (async () => {
       try {
+        let query = "";
+        limitPro
+          ? (query = queryString.concat(`?_limit=${limitPro}`))
+          : (query = queryString);
+
         const {
           data: { products },
-        } = await getProducts(queryString);
+        } = await getProducts(query);
         setProducts(products.data);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
     })();
-  }, [queryString]);
+  }, [queryString, limitPro, setProducts]);
 
   // Get Categories
   useEffect(() => {
@@ -264,11 +287,14 @@ const ProductList = ({ title, className }: IProductList) => {
 
           {/* <!-- end product --> */}
         </div>
+        {loading && <div className="loader" />}
+
         {/* <!-- end list-product --> */}
         <div className="new-list-product">
-          <a href="">Load More</a>
+          <button onClick={onHandleLoadMore}>Load More</button>
         </div>
       </div>
+
       <ProductDetailSub
         products={products}
         productId={productId}

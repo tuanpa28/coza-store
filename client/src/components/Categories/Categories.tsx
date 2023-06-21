@@ -4,7 +4,11 @@ import ICategory from "../../interfaces/category";
 import { getCategories } from "../../api/category";
 import { Link } from "react-router-dom";
 
-const Categories = () => {
+interface ICategories {
+  onHandleGetOneCategory: (id: string) => void;
+}
+
+const Categories = ({ onHandleGetOneCategory }: ICategories) => {
   const [categories, setCategories] = useState<ICategory[]>([]);
 
   // Get Categories
@@ -47,7 +51,7 @@ const Categories = () => {
           </div>
           <Link to={""}>
             <div
-              // onClick={() => onHandleGetOneCategory(cate._id)}
+              onClick={() => onHandleGetOneCategory(String(cate._id))}
               className="textsup-product-object"
             >
               <div style={{ marginTop: "30px" }}>

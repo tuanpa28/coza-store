@@ -1,25 +1,19 @@
-// import IProduct from "../../interfaces/product";
-// import React, { useState } from "react";
 import ProductList from "../../components/ProductList/ProductList";
 import HeaderTop from "../../components/Header/HeaderTop/HeaderTop";
-
-// interface IProductsPage {
-//   products: IProduct[];
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   searchParams: any;
-// }
+import IProduct from "../../interfaces/product";
+import { useState } from "react";
 
 const ProductsPage = () => {
-  // const [searchText, setSearchText] = useState("");
-  // const onHandleSubmit = (value: string) => {
-  //   searchParams.set("_searchText", value);
-  //   window.location.href = `http://localhost:5173/products?${searchParams.toString()}`;
-  // };
-
+  const [products, setProducts] = useState<IProduct[]>([]);
   return (
     <>
       <HeaderTop className="shadow" />
-      <ProductList className="mt-30" />
+      <ProductList
+        _limit={12}
+        products={products}
+        setProducts={setProducts}
+        className="mt-30"
+      />
       {/* <!-- end product overview --> */}
     </>
   );

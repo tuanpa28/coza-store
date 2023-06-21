@@ -70,7 +70,7 @@ const ProductDetailPage = () => {
                 </div>
               </div>
               {/* <!--end all-img-detail--> */}
-              <div className="content-img-detail">
+              <div style={{ width: "100%" }} className="content-img-detail">
                 <h4>{product?.name}</h4>
                 <span>${product?.price}</span>
                 <p>{product?.description}</p>
