@@ -2,8 +2,8 @@ import IProduct from "../../../interfaces/product";
 import { useEffect, useState } from "react";
 
 interface IProductDetailSub {
-  products: IProduct[];
-  productId: string;
+  products?: IProduct[];
+  productId?: string;
   isClicked: boolean;
   handleShowProductDetail: () => void;
 }
