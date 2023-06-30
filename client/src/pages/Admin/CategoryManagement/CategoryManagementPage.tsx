@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ICategory from "../../../interfaces/category";
 import { Link } from "react-router-dom";
 import { Popconfirm, Space, Table, Button, message, Input } from "antd";
@@ -6,18 +6,26 @@ import type { ColumnsType } from "antd/es/table";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../app/store";
+import {
+  hendleRemoveCategory,
+  getAllCategory,
+} from "../../../features/categorySlice";
 
 const { Search } = Input;
 
-interface ICategoryManagementPage {
-  categories: ICategory[];
-  onHandleRemoveCategory: (id: string) => void;
-}
+const CategoryManagementPage = () => {
+  const dispatch = useDispatch();
 
-const CategoryManagementPage = ({
-  categories,
-  onHandleRemoveCategory,
-}: ICategoryManagementPage) => {
+  const categories = useSelector(
+    (state: RootState) => state.category.categories
+  );
+
+  useEffect(() => {
+    dispatch(getAllCategory());
+  }, [dispatch]);
+
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   if (!categories) {
     <Spin indicator={antIcon} />;
@@ -26,7 +34,8 @@ const CategoryManagementPage = ({
   const [searchText, setSearchText] = useState("");
 
   const confirm = (id: string) => {
-    onHandleRemoveCategory(id);
+    dispatch(hendleRemoveCategory(id));
+    message.success(`Xóa danh mục thành công!`);
   };
 
   const cancel = () => {
@@ -70,7 +79,7 @@ const CategoryManagementPage = ({
     },
   ];
 
-  const filterCate = categories?.filter((item) =>
+  const filterCate = categories?.filter((item: ICategory) =>
     item?.name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())
   );
 

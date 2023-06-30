@@ -40,8 +40,8 @@ const ProductDetailSub = ({
         <div className="all-img-detail">
           <div className="sup-img-detail">
             <ul>
-              {product?.album.map((item) => (
-                <li>
+              {product?.album.map((item, index) => (
+                <li key={index}>
                   <img src={item?.url} alt="" />
                 </li>
               ))}

@@ -25,7 +25,10 @@ const BaseLayout = () => {
         {/* <!-- end footer --> */}
       </div>
       {/*  */}
-      <ProductDetailSub isClicked={isClicked} handleShowProductDetail={handleClick} />
+      <ProductDetailSub
+        isClicked={isClicked}
+        handleShowProductDetail={handleClick}
+      />
     </>
   );
 };

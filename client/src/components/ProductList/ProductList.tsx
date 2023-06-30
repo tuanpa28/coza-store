@@ -1,39 +1,39 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { getProducts } from "../../api/product";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { RootState } from "../../app/store";
+import {
+  getAllProduct,
+  setIsLoading,
+  getProductsByCategoryId,
+} from "../../features/productsSlice";
+import { getAllCategory } from "../../features/categorySlice";
 import IProduct from "../../interfaces/product";
-import { Link } from "react-router-dom";
 import ProductDetailSub from "./ProductDetailSub/ProductDetailSub";
-import { useNavigate } from "react-router-dom";
-import { getCategories, getCategory } from "../../api/category";
-import ICategory from "../../interfaces/category";
 import "./ProductList.css";
+import ICategory from "../../interfaces/category";
 
 interface IProductList {
   title?: string;
   className?: string;
   _limit?: number;
-  products: IProduct[];
-  setProducts: any;
 }
 
-const ProductList = ({
-  title,
-  _limit,
-  className,
-  products,
-  setProducts,
-}: IProductList) => {
-  // const [products, setProducts] = useState<IProduct[]>([]);
-  const [categories, setCategories] = useState<ICategory[]>([]);
+const ProductList = ({ title, _limit, className }: IProductList) => {
+  const products = useSelector((state: RootState) => state.products.products);
+  const categories = useSelector(
+    (state: RootState) => state.category.categories
+  );
+  const isLoading = useSelector((state: RootState) => state.products.isLoading);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [limitPro, setLimitPro] = useState(_limit || 8);
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [isShowFilter, setIsShowFilter] = useState<boolean>(false);
   const [isShowSearch, setIsShowSearch] = useState<boolean>(false);
   const [searchText, setSearchText] = useState("");
   const [productId, setProductId] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [limitPro, setLimitPro] = useState(_limit || 8);
-  const navigate = useNavigate();
 
   const urlParams = new URLSearchParams(location.search);
   const queryString = `${
@@ -41,7 +41,7 @@ const ProductList = ({
   }`;
 
   const onHandleLoadMore = () => {
-    setLoading(true);
+    dispatch(setIsLoading(true));
     setLimitPro(limitPro + 8);
   };
 
@@ -63,63 +63,33 @@ const ProductList = ({
     navigate(window.location.pathname);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onHandleGetOneCategory = async (id: any) => {
-    try {
-      const { data } = await getCategory(id);
-      setProducts(data.category.productId);
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(getProductsByCategoryId(id));
   };
 
   // Get Products
   useEffect(() => {
-    (async () => {
-      try {
-        let query = "";
-        limitPro
-          ? (query = queryString.concat(`?_limit=${limitPro}`))
-          : (query = queryString);
-
-        const {
-          data: { products },
-        } = await getProducts(query);
-        setProducts(products.data);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, [queryString, limitPro, setProducts]);
+    let query = "";
+    limitPro
+      ? (query = queryString.concat(`?_limit=${limitPro}`))
+      : (query = queryString);
+    dispatch(getAllProduct(query));
+  }, [dispatch, queryString, limitPro]);
 
   // Get Categories
   useEffect(() => {
-    (async () => {
-      try {
-        const {
-          data: { categories },
-        } = await getCategories();
-        setCategories(categories.data);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
+    dispatch(getAllCategory());
+  }, [dispatch]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleShowProductDetail = (productId?: any) => {
     setProductId(productId || "");
     setIsClicked(!isClicked);
   };
 
-  const getAllProduct = async () => {
-    try {
-      const {
-        data: { products },
-      } = await getProducts();
-      setProducts(products.data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleGetAllProduct = async () => {
+    dispatch(getAllProduct());
   };
 
   return (
@@ -134,8 +104,8 @@ const ProductList = ({
 
           <div className="list-title-product">
             <div className="sup-list-title-product">
-              <button onClick={getAllProduct}>All Product</button>
-              {categories.map((cate) => (
+              <button onClick={handleGetAllProduct}>All Product</button>
+              {categories?.map((cate: ICategory) => (
                 <button
                   key={cate._id}
                   onClick={() => onHandleGetOneCategory(cate._id)}
@@ -262,7 +232,7 @@ const ProductList = ({
         {/* <!-- end title-product --> */}
         <div className="list-product">
           {products?.map(
-            (product): JSX.Element => (
+            (product: IProduct): JSX.Element => (
               <div key={product._id} className="product">
                 <div className="img-product">
                   <img src={product.image.url} alt="" />
@@ -287,7 +257,7 @@ const ProductList = ({
 
           {/* <!-- end product --> */}
         </div>
-        {loading && <div className="loader" />}
+        {isLoading && <div className="loader" />}
 
         {/* <!-- end list-product --> */}
         <div className="new-list-product">

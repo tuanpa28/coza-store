@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import IProduct from "../../../interfaces/product";
 import ICategory from "../../../interfaces/category";
 import {
   Button,
@@ -13,16 +12,22 @@ import {
   message,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { useAppDispatch, useAppSelector } from "../../../app/hook";
+import { RootState } from "../../../app/store";
+import { useNavigate } from "react-router-dom";
+import { hendleAddProduct } from "../../../features/productsSlice";
 
 const { Dragger } = Upload;
 
-interface IAddProductPage {
-  onHandleCreate: (product: IProduct) => void;
-  categories: ICategory[];
-}
+const AddProductPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-const AddProductPage = ({ onHandleCreate, categories }: IAddProductPage) => {
-  const selectOptions = categories?.map((cate) => {
+  const categories = useAppSelector(
+    (state: RootState) => state.category.categories
+  );
+
+  const selectOptions = categories?.map((cate: ICategory) => {
     return { label: `${cate.name}`, value: `${cate._id}` };
   });
 
@@ -46,7 +51,9 @@ const AddProductPage = ({ onHandleCreate, categories }: IAddProductPage) => {
 
     const newValues = { ...values, image: newImages[0], album: newAlbum };
 
-    onHandleCreate(newValues);
+    dispatch(hendleAddProduct(newValues));
+    message.success(`Thêm sản phẩm thành công!`);
+    navigate("/admin/products");
   };
 
   const props: UploadProps = {

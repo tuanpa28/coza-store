@@ -12,29 +12,38 @@ import {
   UploadProps,
   message,
 } from "antd";
-import { useParams } from "react-router-dom";
-import ICategory from "../../../interfaces/category";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../app/hook";
+import { useEffect } from "react";
+import {
+  getAllProduct,
+  hendleUpdateProduct,
+} from "../../../features/productsSlice";
+import { getAllCategory } from "../../../features/categorySlice";
 import IProduct from "../../../interfaces/product";
+import ICategory from "../../../interfaces/category";
 
 const { Dragger } = Upload;
-interface IUpdateProductPage {
-  products: IProduct[];
-  categories: ICategory[];
-  onHandleUpdate: (product: IProduct) => void;
-}
 
-const UpdateProductPage = ({
-  products,
-  categories,
-  onHandleUpdate,
-}: IUpdateProductPage) => {
+const UpdateProductPage = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const products = useAppSelector((state) => state.products.products);
+  const categories = useAppSelector((state) => state.category.categories);
+
+  useEffect(() => {
+    dispatch(getAllProduct("?_limit=20"));
+    dispatch(getAllCategory());
+  }, [dispatch]);
+
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   if (!products) {
     <Spin indicator={antIcon} />;
   }
 
   const { id } = useParams();
-  const product = products?.find((product) => product._id === id);
+  const product = products?.find((product: IProduct) => product._id === id);
   const [form] = Form.useForm();
 
   form.setFieldsValue({
@@ -48,7 +57,7 @@ const UpdateProductPage = ({
     categoryId: product?.categoryId,
   });
 
-  const selectOptions = categories?.map((cate) => {
+  const selectOptions = categories?.map((cate: ICategory) => {
     return { label: `${cate.name}`, value: `${cate._id}` };
   });
 
@@ -95,8 +104,10 @@ const UpdateProductPage = ({
           ...values,
           image: { url: values.image.url, publicId: values.image.publicId },
         };
+    dispatch(hendleUpdateProduct(newValues));
 
-    onHandleUpdate(newValues);
+    message.success(`Sửa sản phẩm thành công!`);
+    navigate("/admin/products");
   };
 
   const props2: UploadProps = {

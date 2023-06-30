@@ -6,21 +6,32 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import ICategory from "../../../interfaces/category";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { RootState } from "../../../app/store";
+import {
+  getAllProduct,
+  hendleRemoveProduct,
+} from "../../../features/productsSlice";
+import { useAppDispatch, useAppSelector } from "../../../app/hook";
+import { getAllCategory } from "../../../features/categorySlice";
 
 const { Search } = Input;
 
-interface IProductManagementPage {
-  products: IProduct[];
-  onHandleRemove: (id: string) => void;
-  categories: ICategory[];
-}
+const ProductManagementPage = () => {
+  const dispatch = useAppDispatch();
 
-const ProductManagementPage = ({
-  onHandleRemove,
-  products,
-  categories,
-}: IProductManagementPage) => {
+  const products = useAppSelector(
+    (state: RootState) => state.products.products
+  );
+  const categories = useAppSelector(
+    (state: RootState) => state.category.categories
+  );
+
+  useEffect(() => {
+    dispatch(getAllProduct("?_limit=20"));
+    dispatch(getAllCategory());
+  }, [dispatch]);
+
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   if (!products) {
     <Spin indicator={antIcon} />;
@@ -29,7 +40,8 @@ const ProductManagementPage = ({
   const [searchText, setSearchText] = useState("");
 
   const confirm = (idProduct: string) => {
-    onHandleRemove(idProduct);
+    dispatch(hendleRemoveProduct(idProduct));
+    message.success(`Xóa sản phẩm thành công!`);
   };
 
   const cancel = () => {
@@ -78,7 +90,7 @@ const ProductManagementPage = ({
       dataIndex: "categoryId",
       render: (cate) => (
         <span>
-          {categories?.map((category) =>
+          {categories?.map((category: ICategory) =>
             category._id === cate ? category.name : ""
           )}
         </span>
@@ -114,7 +126,7 @@ const ProductManagementPage = ({
     },
   ];
 
-  const filterPro = products?.filter((item) =>
+  const filterPro = products?.filter((item: IProduct) =>
     item?.name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())
   );
 

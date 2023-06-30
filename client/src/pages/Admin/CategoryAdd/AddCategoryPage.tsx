@@ -1,11 +1,14 @@
 import ICategory from "../../../interfaces/category";
+import { message } from "antd";
 import { Button, Form, Input, Typography } from "antd";
+import { useDispatch } from "react-redux";
+import { hendleCreateCategory } from "../../../features/categorySlice";
+import { useNavigate } from "react-router-dom";
 
-interface IAddCategoryPage {
-  onHandleCreateCategory: (category: ICategory) => void;
-}
+const AddCategoryPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-const AddCategoryPage = ({ onHandleCreateCategory }: IAddCategoryPage) => {
   const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
@@ -17,7 +20,9 @@ const AddCategoryPage = ({ onHandleCreateCategory }: IAddCategoryPage) => {
   };
 
   const onFinish = (values: ICategory) => {
-    onHandleCreateCategory(values);
+    dispatch(hendleCreateCategory(values));
+    message.success(`Thêm danh mục thành công!`);
+    navigate("/admin/category");
   };
 
   return (
@@ -41,7 +46,7 @@ const AddCategoryPage = ({ onHandleCreateCategory }: IAddCategoryPage) => {
       </Form.Item>
 
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-        <Button size="large"  htmlType="submit">
+        <Button size="large" htmlType="submit">
           Thêm danh mục
         </Button>
       </Form.Item>

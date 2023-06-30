@@ -1,24 +1,36 @@
 import ICategory from "../../../interfaces/category";
 import { LoadingOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Spin, Typography } from "antd";
-import { useParams } from "react-router-dom";
+import { Button, Form, Input, Spin, Typography, message } from "antd";
+import { useNavigate, useParams } from "react-router-dom";
+import { RootState } from "../../../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import {
+  getAllCategory,
+  hendleUpdateCategory,
+} from "../../../features/categorySlice";
 
-interface IUpdateCategoryPage {
-  categories: ICategory[];
-  onHandleUpdateCategory: (category: ICategory) => void;
-}
+const UpdateCategoryPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-const UpdateCategoryPage = ({
-  categories,
-  onHandleUpdateCategory,
-}: IUpdateCategoryPage) => {
+  const categories = useSelector(
+    (state: RootState) => state.category.categories
+  );
+
+  useEffect(() => {
+    dispatch(getAllCategory());
+  }, [dispatch]);
+
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   if (!categories) {
     <Spin indicator={antIcon} />;
   }
 
   const { id } = useParams();
-  const category = categories?.find((category) => category._id === id);
+  const category = categories?.find(
+    (category: ICategory) => category._id === id
+  );
   const [form] = Form.useForm();
 
   form.setFieldsValue({
@@ -36,7 +48,9 @@ const UpdateCategoryPage = ({
   };
 
   const onFinish = (values: ICategory) => {
-    onHandleUpdateCategory(values);
+    dispatch(hendleUpdateCategory(values));
+    message.success(`Sửa danh mục thành công!`);
+    navigate("/admin/category");
   };
 
   return (

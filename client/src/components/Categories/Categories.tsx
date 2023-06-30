@@ -1,33 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
 import ICategory from "../../interfaces/category";
-import { getCategories } from "../../api/category";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../app/store";
+import { getProductsByCategoryId } from "../../features/productsSlice";
 
-interface ICategories {
-  onHandleGetOneCategory: (id: string) => void;
-}
+const Categories = () => {
+  const dispatch = useDispatch();
 
-const Categories = ({ onHandleGetOneCategory }: ICategories) => {
-  const [categories, setCategories] = useState<ICategory[]>([]);
-
-  // Get Categories
-  useEffect(() => {
-    (async () => {
-      try {
-        const {
-          data: { categories },
-        } = await getCategories();
-        setCategories(categories.data);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
+  const categories = useSelector(
+    (state: RootState) => state.category.categories
+  );
 
   return (
     <div className="mx-auto-300 product-object">
-      {categories?.map((cate) => (
+      {categories?.map((cate: ICategory) => (
         <div key={cate._id} className="sup-product-object">
           <div className="imgsup-product-object">
             {cate.name === "Women" && (
@@ -51,7 +38,7 @@ const Categories = ({ onHandleGetOneCategory }: ICategories) => {
           </div>
           <Link to={""}>
             <div
-              onClick={() => onHandleGetOneCategory(String(cate._id))}
+              onClick={dispatch(getProductsByCategoryId(cate._id))}
               className="textsup-product-object"
             >
               <div style={{ marginTop: "30px" }}>
