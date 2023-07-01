@@ -9,7 +9,12 @@ import IProduct from "../interfaces/product";
 import { getCategory } from "../api/category";
 import { deleteImages } from "../api/upload";
 
-const initialState = {
+interface initialState {
+  products: IProduct[];
+  isLoading: boolean;
+}
+
+const initialState: initialState = {
   products: [],
   isLoading: false,
 };
@@ -130,13 +135,12 @@ const productsSlice = createSlice({
       .addCase(hendleUpdateProduct.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(hendleUpdateProduct.fulfilled, (state) => {
-        // const newProducts = state.products?.map((product: IProduct) =>
-        //   product._id === action?.payload?.product?._id
-        //     ? action.payload.product
-        //     : product
-        // );
-        // state.products = newProducts;
+      .addCase(hendleUpdateProduct.fulfilled, (state, action) => {
+        state.products = state.products?.map((product: IProduct) =>
+          product._id === action?.payload?.product?._id
+            ? action.payload.product
+            : product
+        );
         state.isLoading = false;
       })
       .addCase(hendleUpdateProduct.rejected, (state) => {

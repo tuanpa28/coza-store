@@ -7,7 +7,12 @@ import {
 } from "../api/category";
 import ICategory from "../interfaces/category";
 
-const initialState = {
+interface initialState {
+  categories: ICategory[];
+  isLoading: boolean;
+}
+
+const initialState: initialState = {
   categories: [],
   isLoading: false,
 };
@@ -87,7 +92,6 @@ const categorySlice = createSlice({
         state.categories = state.categories?.filter(
           (category: ICategory) => category._id !== action.payload
         );
-
         state.isLoading = false;
       })
       .addCase(hendleRemoveCategory.rejected, (state) => {
@@ -97,12 +101,12 @@ const categorySlice = createSlice({
       .addCase(hendleUpdateCategory.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(hendleUpdateCategory.fulfilled, (state) => {
-        // state.categories = state.categories?.map((category: ICategory) =>
-        //   category._id === action.payload?.category?._id
-        //     ? action.payload?.category
-        //     : category
-        // );
+      .addCase(hendleUpdateCategory.fulfilled, (state, action) => {
+        state.categories = state.categories?.map((category: ICategory) =>
+          category._id === action.payload?.category?._id
+            ? action.payload?.category
+            : category
+        );
         state.isLoading = false;
       })
       .addCase(hendleUpdateCategory.rejected, (state) => {

@@ -14,7 +14,7 @@ const ProductDetailPage = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await getProduct(id || "");
+        const { data } = await getProduct(String(id));
         setProduct(data.product);
       } catch (error) {
         console.log(error);
@@ -23,7 +23,7 @@ const ProductDetailPage = () => {
   }, [id]);
 
   const handleShowProductDetail = (productId?: string) => {
-    setProductId(productId || "");
+    setProductId(String(productId));
     setIsClicked(!isClicked);
   };
 

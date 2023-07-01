@@ -1,6 +1,4 @@
 import IProduct from "../../../interfaces/product";
-import { useEffect, useState } from "react";
-
 interface IProductDetailSub {
   products?: IProduct[];
   productId?: string;
@@ -14,12 +12,7 @@ const ProductDetailSub = ({
   products,
   handleShowProductDetail,
 }: IProductDetailSub) => {
-  const [product, setProduct] = useState<IProduct>();
-
-  useEffect(() => {
-    const currentPro = products?.find((product) => product._id === productId);
-    setProduct(currentPro);
-  }, [products, productId]);
+  const product = products?.find((product) => product._id === productId);
 
   return (
     <div

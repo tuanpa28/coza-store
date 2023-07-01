@@ -1,16 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ICategory from "../../interfaces/category";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../app/store";
 import { getProductsByCategoryId } from "../../features/productsSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
 
 const Categories = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const categories = useSelector(
-    (state: RootState) => state.category.categories
-  );
+  const categories = useAppSelector((state) => state.category.categories);
 
   return (
     <div className="mx-auto-300 product-object">
@@ -38,7 +35,7 @@ const Categories = () => {
           </div>
           <Link to={""}>
             <div
-              onClick={dispatch(getProductsByCategoryId(cate._id))}
+              onClick={() => dispatch(getProductsByCategoryId(cate._id))}
               className="textsup-product-object"
             >
               <div style={{ marginTop: "30px" }}>
