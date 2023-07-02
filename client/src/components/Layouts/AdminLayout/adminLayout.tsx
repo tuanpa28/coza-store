@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
-import { Link, Navigate, Outlet } from "react-router-dom";
-import React, { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
+import React, { ReactNode, useState } from "react";
 import { MenuProps } from "antd";
 import {
   Breadcrumb,
@@ -50,7 +50,11 @@ const items: MenuItem[] = [
   ]),
 ];
 
-const AdminLayout = () => {
+interface IAdminLayout {
+  children: ReactNode;
+}
+
+const AdminLayout = ({ children }: IAdminLayout) => {
   const [current, setCurrent] = useState("1");
   const [collapsed, setCollapsed] = useState(false);
 
@@ -116,12 +120,13 @@ const AdminLayout = () => {
             ]}
           />
           <main style={{ marginTop: 25 }}>
-            {Cookies.get("accessToken") ? (
-              <Outlet />
-            ) : (
-              (message.success("Mời bạn đăng nhập để truy cập trang quản trị!"),
-              (<Navigate to="/signin" replace />))
-            )}
+            {Cookies.get("accessToken")
+              ? // <Outlet />
+                children
+              : (message.success(
+                  "Mời bạn đăng nhập để truy cập trang quản trị!"
+                ),
+                (<Navigate to="/signin" replace />))}
           </main>
         </Content>
         <Footer style={{ textAlign: "center" }}>
