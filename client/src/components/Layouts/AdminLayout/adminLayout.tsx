@@ -45,8 +45,8 @@ const items: MenuItem[] = [
   ]),
 
   getItem("Sản phẩm", "sub3", <SolutionOutlined />, [
-    getItem(<Link to={"products/add"}>Thêm sản phẩm</Link>, "4"),
-    getItem(<Link to={"products"}>Sản phẩm</Link>, "5"),
+    getItem(<Link to={"/admin/products/add"}>Thêm sản phẩm</Link>, "4"),
+    getItem(<Link to={"/admin/products"}>Sản phẩm</Link>, "5"),
   ]),
 ];
 
