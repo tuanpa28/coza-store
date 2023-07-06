@@ -13,7 +13,6 @@ import {
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import { RootState } from "../../../app/store";
 import { useNavigate } from "react-router-dom";
 import { hendleAddProduct } from "../../../features/productsSlice";
 
@@ -23,9 +22,7 @@ const AddProductPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const categories = useAppSelector(
-    (state: RootState) => state.category.categories
-  );
+  const categories = useAppSelector((state) => state.category.categories);
 
   const selectOptions = categories?.map((cate: ICategory) => {
     return { label: `${cate.name}`, value: `${cate._id}` };
