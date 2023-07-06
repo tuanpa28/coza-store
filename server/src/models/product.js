@@ -10,8 +10,8 @@ const Product = new Schema(
     quantity: { type: Number, required: true, min: 0 },
     description: { type: String, required: true },
     categoryId: { type: Types.ObjectId, ref: "Category", required: true },
-    createdAt: { type: Date },
-    updatedAt: { type: Date },
+    createdAt: Date,
+    updatedAt: Date,
   },
   { versionKey: false, timestamps: true }
 );

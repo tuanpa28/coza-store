@@ -5,8 +5,8 @@ const Category = new Schema(
   {
     name: { type: String, required: true },
     productId: [{ type: Types.ObjectId, ref: "Product", required: true }],
-    createdAt: { type: Date },
-    updatedAt: { type: Date },
+    createdAt: Date,
+    updatedAt: Date,
   },
   { versionKey: false, timestamps: true }
 );
