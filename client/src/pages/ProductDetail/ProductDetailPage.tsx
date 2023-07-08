@@ -4,6 +4,9 @@ import IProduct from "../../interfaces/product";
 import HeaderTop from "../../components/Header/HeaderTop/HeaderTop";
 import { getProduct } from "../../api/product";
 import ProductDetailSub from "../../components/ProductList/ProductDetailSub/ProductDetailSub";
+import { message } from "antd";
+import { addToCart } from "../../api/cart";
+import { IAddToCart } from "../../interfaces/cart";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -25,6 +28,11 @@ const ProductDetailPage = () => {
   const handleShowProductDetail = (productId?: string) => {
     setProductId(String(productId));
     setIsClicked(!isClicked);
+  };
+
+  const onHandleAddToCart = async (dataCart: IAddToCart) => {
+    await addToCart(dataCart);
+    message.success("Sản phẩm đã được thêm vào giỏ hàng!");
   };
 
   return (
@@ -105,7 +113,16 @@ const ProductDetailPage = () => {
                         <i className="fa-solid fa-plus"></i>
                       </div>
                     </div>
-                    <button>Add to cart</button>
+                    <button
+                      onClick={() =>
+                        onHandleAddToCart({
+                          productId: String(product?._id),
+                          quantity: 1,
+                        })
+                      }
+                    >
+                      Add to cart
+                    </button>
                   </div>
                 </div>
                 <div className="list-icon-choose">

@@ -1,3 +1,6 @@
+import { message } from "antd";
+import { addToCart } from "../../../api/cart";
+import { IAddToCart } from "../../../interfaces/cart";
 import IProduct from "../../../interfaces/product";
 interface IProductDetailSub {
   products?: IProduct[];
@@ -13,6 +16,11 @@ const ProductDetailSub = ({
   handleShowProductDetail,
 }: IProductDetailSub) => {
   const product = products?.find((product) => product._id === productId);
+
+  const onHandleAddToCart = async (dataCart: IAddToCart) => {
+    await addToCart(dataCart);
+    message.success("Sản phẩm đã được thêm vào giỏ hàng!");
+  };
 
   return (
     <div
@@ -91,7 +99,16 @@ const ProductDetailSub = ({
                   <i className="fa-solid fa-plus"></i>
                 </div>
               </div>
-              <button>Add to cart</button>
+              <button
+                onClick={() =>
+                  onHandleAddToCart({
+                    productId: String(product?._id),
+                    quantity: 1,
+                  })
+                }
+              >
+                Add to cart
+              </button>
             </div>
           </div>
           <div className="list-icon-choose">

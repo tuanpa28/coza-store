@@ -88,9 +88,9 @@ const HeaderTop = ({ className }: IHeaderTop) => {
               </a>
             </div>
             <div className="icon-menu">
-              <a href="">
+              <Link to="/shoping-cart">
                 <i className="fa-solid fa-cart-shopping"></i>
-              </a>
+              </Link>
             </div>
             <div className="icon-menu">
               <a href="">

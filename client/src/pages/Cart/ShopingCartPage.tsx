@@ -1,7 +1,25 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import HeaderTop from "../../components/Header/HeaderTop/HeaderTop";
-import "../../assets/css/shoping-cart.css"
+import "../../assets/css/shoping-cart.css";
+import { useAppSelector, useAppDispatch } from "../../app/hook";
+import { useEffect } from "react";
+import { getCartByUser } from "../../features/cartSlice";
+import { deleteProductCart } from "../../api/cart";
+import { message } from "antd";
 
 const ShopingCartPage = () => {
+  const dispatch = useAppDispatch();
+  const cart = useAppSelector((state) => state.cart.cart);
+
+  useEffect(() => {
+    dispatch(getCartByUser());
+  }, [dispatch]);
+
+  const onHandleDeteleProductCart = async (productId: string) => {
+    await deleteProductCart(productId);
+    message.success("Đã xóa thành công!");
+  };
+
   return (
     <>
       <HeaderTop className="shadow" />
@@ -25,54 +43,38 @@ const ShopingCartPage = () => {
                     <th className="column-4">Quantity</th>
                     <th className="column-5">Total</th>
                   </tr>
-                  <tr className="table-row bor-b">
-                    <td className="column-1">
-                      <div className="how-itemcart1">
-                        <img src="https://res.cloudinary.com/dugodumc5/image/upload/v1685349069/coza-store/ewhwojirzrbyd2gulmc6.webp" alt="" />
-                      </div>
-                    </td>
-                    <td className="column-2">Fresh Strawberries</td>
-                    <td className="column-3">$ 36.00</td>
-                    <td className="column-4">
-                      <div
-                        style={{ marginLeft: "18px" }}
-                        className="more-erase"
-                      >
-                        <div className="erase">
-                          <i className="fa-solid fa-minus"></i>
+
+                  {cart?.products?.map((product: any) => (
+                    <tr key={product._id} className="table-row bor-b">
+                      <td className="column-1">
+                        <div
+                          onClick={() => onHandleDeteleProductCart(product._id)}
+                          className="how-itemcart1"
+                        >
+                          <img src={product.productId.image.url} alt="" />
                         </div>
-                        <input type="text" value="1" />
-                        <div className="more">
-                          <i className="fa-solid fa-plus"></i>
+                      </td>
+                      <td className="column-2">{product.productId.name}</td>
+                      <td className="column-3">${product.price}</td>
+                      <td className="column-4">
+                        <div
+                          style={{ marginLeft: "18px" }}
+                          className="more-erase"
+                        >
+                          <div className="erase">
+                            <i className="fa-solid fa-minus"></i>
+                          </div>
+                          <input type="text" value={product.quantity} />
+                          <div className="more">
+                            <i className="fa-solid fa-plus"></i>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="column-5">$ 36.00</td>
-                  </tr>
-                  <tr className="table-row">
-                    <td className="column-1">
-                      <div className="how-itemcart1">
-                        <img src="https://res.cloudinary.com/dugodumc5/image/upload/v1685349069/coza-store/l9ef1qhsupftjxfpcuy2.webp" alt="" />
-                      </div>  
-                    </td>
-                    <td className="column-2">Lightweight Jacket</td>
-                    <td className="column-3">$ 16.00</td>
-                    <td className="column-4">
-                      <div
-                        style={{ marginLeft: "18px" }}
-                        className="more-erase"
-                      >
-                        <div className="erase">
-                          <i className="fa-solid fa-minus"></i>
-                        </div>
-                        <input type="text" value="1" />
-                        <div className="more">
-                          <i className="fa-solid fa-plus"></i>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="column-5">$ 16.00</td>
-                  </tr>
+                      </td>
+                      <td className="column-5">
+                        ${product.quantity * product.price}
+                      </td>
+                    </tr>
+                  ))}
                 </table>
               </div>
               <div className="bor1 flex-sb plr-40 ptb-20">
@@ -96,7 +98,7 @@ const ShopingCartPage = () => {
                     <span className="stext">Subtotal:</span>
                   </div>
                   <div className="size-209">
-                    <span className="mtext">$79.65</span>
+                    <span className="mtext">${cart.totalPrice}</span>
                   </div>
                 </div>
                 <div className="bor12 flex pt-6 pb-30">
@@ -142,7 +144,7 @@ const ShopingCartPage = () => {
                     <span className="mtext">Total:</span>
                   </div>
                   <div className="size-209 pt-1">
-                    <span className="mtext">$79.65</span>
+                    <span className="mtext">${cart.totalPrice}</span>
                   </div>
                 </div>
                 <button className="checkout">Proceed to Checkout</button>
