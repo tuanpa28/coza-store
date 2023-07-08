@@ -121,6 +121,8 @@ export const deleteProductCart = async (req, res) => {
       (product) => product.productId != productId
     );
 
+    cart.populate("products.productId").populate("userId");
+
     await cart.save();
 
     // Tính tổng giá của giỏ hàng
