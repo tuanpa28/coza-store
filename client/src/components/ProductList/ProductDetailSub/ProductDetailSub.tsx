@@ -1,7 +1,8 @@
 import { message } from "antd";
-import { addToCart } from "../../../api/cart";
 import { IAddToCart } from "../../../interfaces/cart";
 import IProduct from "../../../interfaces/product";
+import { useAppDispatch } from "../../../app/hook";
+import { addProductToCart } from "../../../features/cartSlice";
 interface IProductDetailSub {
   products?: IProduct[];
   productId?: string;
@@ -15,10 +16,11 @@ const ProductDetailSub = ({
   products,
   handleShowProductDetail,
 }: IProductDetailSub) => {
+  const dispatch = useAppDispatch();
   const product = products?.find((product) => product._id === productId);
 
-  const onHandleAddToCart = async (dataCart: IAddToCart) => {
-    await addToCart(dataCart);
+  const onHandleAddToCart = (dataCart: IAddToCart) => {
+    dispatch(addProductToCart(dataCart));
     message.success("Sản phẩm đã được thêm vào giỏ hàng!");
   };
 

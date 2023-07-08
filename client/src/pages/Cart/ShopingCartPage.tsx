@@ -3,8 +3,7 @@ import HeaderTop from "../../components/Header/HeaderTop/HeaderTop";
 import "../../assets/css/shoping-cart.css";
 import { useAppSelector, useAppDispatch } from "../../app/hook";
 import { useEffect } from "react";
-import { getCartByUser } from "../../features/cartSlice";
-import { deleteProductCart } from "../../api/cart";
+import { getCartByUser, deleteProductToCart } from "../../features/cartSlice";
 import { message } from "antd";
 
 const ShopingCartPage = () => {
@@ -15,8 +14,8 @@ const ShopingCartPage = () => {
     dispatch(getCartByUser());
   }, [dispatch]);
 
-  const onHandleDeteleProductCart = async (productId: string) => {
-    await deleteProductCart(productId);
+  const onHandleDeteleProductCart = (productId: string) => {
+    dispatch(deleteProductToCart(productId));
     message.success("Đã xóa thành công!");
   };
 
@@ -45,13 +44,15 @@ const ShopingCartPage = () => {
                   </tr>
 
                   {cart?.products?.map((product: any) => (
-                    <tr key={product._id} className="table-row bor-b">
+                    <tr key={product.productId._id} className="table-row bor-b">
                       <td className="column-1">
                         <div
-                          onClick={() => onHandleDeteleProductCart(product._id)}
+                          onClick={() =>
+                            onHandleDeteleProductCart(product.productId._id)
+                          }
                           className="how-itemcart1"
                         >
-                          <img src={product.productId.image.url} alt="" />
+                          <img src={product.productId.image?.url} alt="" />
                         </div>
                       </td>
                       <td className="column-2">{product.productId.name}</td>

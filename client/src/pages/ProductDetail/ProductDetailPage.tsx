@@ -5,10 +5,12 @@ import HeaderTop from "../../components/Header/HeaderTop/HeaderTop";
 import { getProduct } from "../../api/product";
 import ProductDetailSub from "../../components/ProductList/ProductDetailSub/ProductDetailSub";
 import { message } from "antd";
-import { addToCart } from "../../api/cart";
+import { addProductToCart } from "../../features/cartSlice";
 import { IAddToCart } from "../../interfaces/cart";
+import { useAppDispatch } from "../../app/hook";
 
 const ProductDetailPage = () => {
+  const dispatch = useAppDispatch();
   const { id } = useParams();
   const [product, setProduct] = useState<IProduct>();
   const [productId, setProductId] = useState("");
@@ -30,8 +32,8 @@ const ProductDetailPage = () => {
     setIsClicked(!isClicked);
   };
 
-  const onHandleAddToCart = async (dataCart: IAddToCart) => {
-    await addToCart(dataCart);
+  const onHandleAddToCart = (dataCart: IAddToCart) => {
+    dispatch(addProductToCart(dataCart));
     message.success("Sản phẩm đã được thêm vào giỏ hàng!");
   };
 

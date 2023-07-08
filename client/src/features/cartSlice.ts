@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getCartUser } from "../api/cart";
+import { addToCart, deleteProductCart, getCartUser } from "../api/cart";
+import { IAddToCart } from "../interfaces/cart";
 
 interface initialState {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,6 +23,26 @@ export const getCartByUser: any = createAsyncThunk(
   }
 );
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const addProductToCart: any = createAsyncThunk(
+  "cart/addToCart",
+  async (dataCart: IAddToCart) => {
+    const { data } = await addToCart(dataCart);
+
+    return data.cart;
+  }
+);
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const deleteProductToCart: any = createAsyncThunk(
+  "cart/deleteProductCart",
+  async (productId: string) => {
+    const { data } = await deleteProductCart(productId);
+
+    return data.cart;
+  }
+);
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -36,6 +57,28 @@ const cartSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(getCartByUser.rejected, (state) => {
+        state.isLoading = false;
+      })
+      // Add To Cart
+      .addCase(addProductToCart.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addProductToCart.fulfilled, (state, action) => {
+        state.cart = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(addProductToCart.rejected, (state) => {
+        state.isLoading = false;
+      })
+      // Delete Product Cart
+      .addCase(deleteProductToCart.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteProductToCart.fulfilled, (state, action) => {
+        state.cart = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(deleteProductToCart.rejected, (state) => {
         state.isLoading = false;
       });
   },
