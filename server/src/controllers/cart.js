@@ -23,7 +23,7 @@ export const getCarts = async (req, res) => {
 
 // Get One Cart
 export const getCart = async (req, res) => {
-  const { userId } = req.params;
+  const { _id: userId } = req.user;
 
   try {
     // Tìm kiếm giỏ hàng của người dùng

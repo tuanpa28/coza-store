@@ -14,7 +14,7 @@ import {
 const router = Router();
 
 router.get("/cart", authenticate, authorization, getCarts);
-router.get("/cart/:userId", authenticate, getCart);
+router.get("/cart/user", authenticate, getCart);
 router.post("/cart/add", authenticate, addToCart);
 router.delete("/cart/delete/:productId", authenticate, deleteProductCart);
 router.delete("/cart/delete-all", authenticate, deleteAllProductCart);
