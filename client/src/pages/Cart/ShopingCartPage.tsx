@@ -92,7 +92,7 @@ const ShopingCartPage = () => {
               </div>
             </div>
             <div className="sub-row-2">
-              <div className="bor1 ml-50 mb-50 pt-30 pb-40 pl-40 pr-40">
+              <div className="bor1 ml-50 mb-50 pt-30 pb-40">
                 <h3 className="h3">Cart Totals</h3>
                 <div className="bor12 pb-13 flex">
                   <div className="size-208">
