@@ -109,7 +109,9 @@ export const deleteProductCart = async (req, res) => {
   const { productId } = req.params;
   try {
     // Tìm kiếm giỏ hàng của người dùng
-    let cart = await Cart.findOne({ userId });
+    let cart = await Cart.findOne({ userId })
+      .populate("products.productId")
+      .populate("userId");
 
     // Nếu không tìm thấy giỏ hàng, trả về lỗi
     if (!cart) {
@@ -118,10 +120,8 @@ export const deleteProductCart = async (req, res) => {
 
     // Tạo mảng mới không chứa sản phẩm muốn xóa
     cart.products = cart.products.filter(
-      (product) => product.productId != productId
+      (product) => product.productId._id != productId
     );
-
-    cart.populate("products.productId").populate("userId");
 
     await cart.save();
 
