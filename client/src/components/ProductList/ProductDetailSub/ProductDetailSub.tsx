@@ -3,6 +3,7 @@ import { IAddToCart } from "../../../interfaces/cart";
 import IProduct from "../../../interfaces/product";
 import { useAppDispatch } from "../../../app/hook";
 import { addProductToCart } from "../../../features/cartSlice";
+import { useState } from "react";
 interface IProductDetailSub {
   products?: IProduct[];
   productId?: string;
@@ -17,6 +18,7 @@ const ProductDetailSub = ({
   handleShowProductDetail,
 }: IProductDetailSub) => {
   const dispatch = useAppDispatch();
+  const [quantity, setQuantity] = useState<number>(1);
   const product = products?.find((product) => product._id === productId);
 
   const onHandleAddToCart = (dataCart: IAddToCart) => {
@@ -93,11 +95,21 @@ const ProductDetailSub = ({
             </div>
             <div className="all-more-erase">
               <div className="more-erase">
-                <div className="erase">
+                <div
+                  onClick={() => setQuantity((pre) => pre - 1)}
+                  className="erase"
+                >
                   <i className="fa-solid fa-minus"></i>
                 </div>
-                <input type="text" defaultValue="1" />
-                <div className="more">
+                <input
+                  type="text"
+                  value={quantity}
+                  onChange={(event) => setQuantity(Number(event.target.value))}
+                />
+                <div
+                  onClick={() => setQuantity((pre) => pre + 1)}
+                  className="more"
+                >
                   <i className="fa-solid fa-plus"></i>
                 </div>
               </div>
@@ -105,7 +117,7 @@ const ProductDetailSub = ({
                 onClick={() =>
                   onHandleAddToCart({
                     productId: String(product?._id),
-                    quantity: 1,
+                    quantity,
                   })
                 }
               >

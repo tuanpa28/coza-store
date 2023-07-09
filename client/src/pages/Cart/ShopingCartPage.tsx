@@ -2,21 +2,78 @@
 import HeaderTop from "../../components/Header/HeaderTop/HeaderTop";
 import "../../assets/css/shoping-cart.css";
 import { useAppSelector, useAppDispatch } from "../../app/hook";
-import { useEffect } from "react";
-import { getCartByUser, deleteProductToCart } from "../../features/cartSlice";
+import { useEffect, useState } from "react";
+import {
+  getCartByUser,
+  deleteProductToCart,
+  addProductToCart,
+} from "../../features/cartSlice";
 import { message } from "antd";
+import { IProductCart } from "../../interfaces/cart";
 
 const ShopingCartPage = () => {
   const dispatch = useAppDispatch();
   const cart = useAppSelector((state) => state.cart.cart);
+  const [products, setProducts] = useState<IProductCart[]>([]);
 
   useEffect(() => {
     dispatch(getCartByUser());
   }, [dispatch]);
 
+  useEffect(() => {
+    setProducts(cart?.products);
+  }, [cart]);
+
+  // Xóa Product trong giỏ hàng
   const onHandleDeteleProductCart = (productId: string) => {
     dispatch(deleteProductToCart(productId));
     message.success("Đã xóa thành công!");
+  };
+
+  // Change khi người dùng nhập số lượng vào thẻ input
+  const onHandleChangeQuantity = (productId: string, quantity: number) => {
+    const productsUpdate = products.map((product) =>
+      product.productId._id === productId ? { ...product, quantity } : product
+    );
+
+    setProducts(productsUpdate);
+  };
+
+  // - 1 khi người dùng click trừ
+  const onHandleDecrease = (productId: string, quantity: number) => {
+    if (quantity > 1) {
+      const productsUpdate = products.map((product) =>
+        product.productId._id === productId
+          ? { ...product, quantity: quantity - 1 }
+          : product
+      );
+
+      setProducts(productsUpdate);
+    }
+  };
+
+  // + 1 khi người dùng click cộng
+  const onHandleIncrease = (productId: string, quantity: number) => {
+    const productsUpdate = products.map((product) =>
+      product.productId._id === productId
+        ? { ...product, quantity: quantity + 1 }
+        : product
+    );
+
+    setProducts(productsUpdate);
+  };
+
+  // Cập nhật lại giỏ hàng
+  const onHandleUpdateCart = () => {
+    products?.map((product) => {
+      dispatch(
+        addProductToCart({
+          quantity: product.quantity,
+          productId: product.productId._id,
+        })
+      );
+    });
+    message.success("Cập nhật giỏ hàng thành công!");
   };
 
   return (
@@ -43,7 +100,7 @@ const ShopingCartPage = () => {
                     <th className="column-5">Total</th>
                   </tr>
 
-                  {cart?.products?.map((product: any) => (
+                  {products?.map((product: any) => (
                     <tr key={product.productId._id} className="table-row bor-b">
                       <td className="column-1">
                         <div
@@ -62,11 +119,36 @@ const ShopingCartPage = () => {
                           style={{ marginLeft: "18px" }}
                           className="more-erase"
                         >
-                          <div className="erase">
+                          <div
+                            onClick={() =>
+                              onHandleDecrease(
+                                product.productId._id,
+                                product.quantity
+                              )
+                            }
+                            className="erase"
+                          >
                             <i className="fa-solid fa-minus"></i>
                           </div>
-                          <input type="text" value={product.quantity} />
-                          <div className="more">
+                          <input
+                            type="text"
+                            value={product.quantity}
+                            onChange={(event) =>
+                              onHandleChangeQuantity(
+                                product.productId._id,
+                                Number(event.target.value)
+                              )
+                            }
+                          />
+                          <div
+                            onClick={() =>
+                              onHandleIncrease(
+                                product.productId._id,
+                                product.quantity
+                              )
+                            }
+                            className="more"
+                          >
                             <i className="fa-solid fa-plus"></i>
                           </div>
                         </div>
@@ -85,14 +167,16 @@ const ShopingCartPage = () => {
                     type="text"
                     placeholder="Coupon Code"
                   />
-                  <div className="update-cart">Apply coupon</div>
+                  <button className="update-cart">Apply coupon</button>
                 </div>
 
-                <div className="update-cart">Update Cart</div>
+                <div onClick={onHandleUpdateCart} className="update-cart">
+                  Update Cart
+                </div>
               </div>
             </div>
             <div className="sub-row-2">
-              <div className="bor1 ml-50 mb-50 pt-30 pb-40">
+              <div className="bor1 ml-50 mb-50 pt-30 pb-40 pl-40 pr-40">
                 <h3 className="h3">Cart Totals</h3>
                 <div className="bor12 pb-13 flex">
                   <div className="size-208">

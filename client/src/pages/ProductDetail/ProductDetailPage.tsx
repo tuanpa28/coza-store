@@ -15,6 +15,7 @@ const ProductDetailPage = () => {
   const [product, setProduct] = useState<IProduct>();
   const [productId, setProductId] = useState("");
   const [isClicked, setIsClicked] = useState<boolean>(false);
+  const [quantity, setQuantity] = useState<number>(1);
 
   useEffect(() => {
     (async () => {
@@ -107,11 +108,23 @@ const ProductDetailPage = () => {
                   </div>
                   <div className="all-more-erase">
                     <div className="more-erase">
-                      <div className="erase">
+                      <div
+                        onClick={() => setQuantity((pre) => pre - 1)}
+                        className="erase"
+                      >
                         <i className="fa-solid fa-minus"></i>
                       </div>
-                      <input type="text" value="1" />
-                      <div className="more">
+                      <input
+                        type="text"
+                        value={quantity}
+                        onChange={(event) =>
+                          setQuantity(Number(event.target.value))
+                        }
+                      />
+                      <div
+                        onClick={() => setQuantity((pre) => pre + 1)}
+                        className="more"
+                      >
                         <i className="fa-solid fa-plus"></i>
                       </div>
                     </div>
@@ -119,7 +132,7 @@ const ProductDetailPage = () => {
                       onClick={() =>
                         onHandleAddToCart({
                           productId: String(product?._id),
-                          quantity: 1,
+                          quantity,
                         })
                       }
                     >

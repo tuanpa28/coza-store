@@ -51,7 +51,9 @@ export const addToCart = async (req, res) => {
 
   try {
     // Kiểm tra xem user có giỏ hàng hay chưa
-    let cart = await Cart.findOne({ userId });
+    let cart = await Cart.findOne({ userId })
+      .populate("products.productId")
+      .populate("userId");
 
     // Nếu chưa có giỏ hàng thì tạo mới
     if (!cart) {
