@@ -51,9 +51,7 @@ export const addToCart = async (req, res) => {
 
   try {
     // Kiểm tra xem user có giỏ hàng hay chưa
-    let cart = await Cart.findOne({ userId })
-      .populate("products.productId")
-      .populate("userId");
+    let cart = await Cart.findOne({ userId });
 
     // Nếu chưa có giỏ hàng thì tạo mới
     if (!cart) {
@@ -67,7 +65,7 @@ export const addToCart = async (req, res) => {
       await User.findByIdAndUpdate(userId, { cartId: cart._id });
     }
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-    const productExists = cart.products.find(
+    let productExists = cart.products.find(
       (product) => product.productId == productId
     );
 
@@ -100,6 +98,49 @@ export const addToCart = async (req, res) => {
     return res
       .status(200)
       .json({ message: "Sản phẩm đã được thêm vào giỏ hàng!", cart });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// Upcate Cart
+export const updateCart = async (req, res) => {
+  const { _id: userId } = req.user;
+  const { productId, quantity } = req.body;
+  try {
+    // Kiểm tra xem user có giỏ hàng hay chưa
+    let cart = await Cart.findOne({ userId });
+
+    // Nếu không tìm thấy giỏ hàng, trả về lỗi
+    if (!cart) {
+      return res.status(400).json({ message: "Không có giỏ hàng!" });
+    }
+
+    // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+    let product = cart.products.find(
+      (product) => product.productId == productId
+    );
+
+    // Nếu không tìm thấy sản phẩm trong giỏ hàng, trả về lỗi
+    if (!product) {
+      return res
+        .status(400)
+        .json({ message: "Không tìm thấy sản phẩm trong giỏ hàng!" });
+    }
+
+    // Cập nhật số lượng sản phẩm
+    product.quantity = quantity;
+
+    // Cập nhật giá sản phẩm theo số lượng
+    const getPriceProduct = await Product.findById(productId).select("price");
+    product.price = getPriceProduct.price * quantity;
+
+    await cart.save();
+
+    // Tính tổng giá của giỏ hàng
+    handleTotalOrder(cart);
+
+    return res.status(200).json({ message: "Cập nhật thành công!", cart });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

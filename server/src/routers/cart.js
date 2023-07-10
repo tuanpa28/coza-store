@@ -4,6 +4,7 @@ import { authorization } from "../middlewares/authorization.js";
 
 import {
   addToCart,
+  updateCart,
   getCart,
   getCarts,
   deleteProductCart,
@@ -16,6 +17,7 @@ const router = Router();
 router.get("/cart", authenticate, authorization, getCarts);
 router.get("/cart/user", authenticate, getCart);
 router.post("/cart/add", authenticate, addToCart);
+router.put("/cart/update", authenticate, updateCart);
 router.delete("/cart/delete/:productId", authenticate, deleteProductCart);
 router.delete("/cart/delete-all", authenticate, deleteAllProductCart);
 router.post("/cart/checkout", authenticate, checkOut);
