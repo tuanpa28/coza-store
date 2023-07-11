@@ -4,6 +4,8 @@ import IProduct from "../../../interfaces/product";
 import { useAppDispatch } from "../../../app/hook";
 import { addProductToCart } from "../../../features/cartSlice";
 import { useState } from "react";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 interface IProductDetailSub {
   products?: IProduct[];
   productId?: string;
@@ -17,13 +19,19 @@ const ProductDetailSub = ({
   products,
   handleShowProductDetail,
 }: IProductDetailSub) => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [quantity, setQuantity] = useState<number>(1);
   const product = products?.find((product) => product._id === productId);
 
   const onHandleAddToCart = (dataCart: IAddToCart) => {
-    dispatch(addProductToCart(dataCart));
-    message.success("Sản phẩm đã được thêm vào giỏ hàng!");
+    if (!Cookies.get("accessToken")) {
+      message.success("Mời bạn đăng nhập!");
+      navigate("/signin");
+    } else {
+      dispatch(addProductToCart(dataCart));
+      message.success("Sản phẩm đã được thêm vào giỏ hàng!");
+    }
   };
 
   return (

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import IProduct from "../../interfaces/product";
 import HeaderTop from "../../components/Header/HeaderTop/HeaderTop";
 import { getProduct } from "../../api/product";
@@ -8,9 +8,11 @@ import { message } from "antd";
 import { addProductToCart } from "../../features/cartSlice";
 import { IAddToCart } from "../../interfaces/cart";
 import { useAppDispatch } from "../../app/hook";
+import Cookies from "js-cookie";
 
 const ProductDetailPage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [product, setProduct] = useState<IProduct>();
   const [productId, setProductId] = useState("");
@@ -34,8 +36,13 @@ const ProductDetailPage = () => {
   };
 
   const onHandleAddToCart = (dataCart: IAddToCart) => {
-    dispatch(addProductToCart(dataCart));
-    message.success("Sản phẩm đã được thêm vào giỏ hàng!");
+    if (!Cookies.get("accessToken")) {
+      message.success("Mời bạn đăng nhập!");
+      navigate("/signin");
+    } else {
+      dispatch(addProductToCart(dataCart));
+      message.success("Sản phẩm đã được thêm vào giỏ hàng!");
+    }
   };
 
   return (
