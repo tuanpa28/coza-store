@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import {
   getCartByUser,
   deleteProductToCart,
-  addProductToCart,
+  updateProductToCart,
 } from "../../features/cartSlice";
 import { message } from "antd";
 import { IProductCart } from "../../interfaces/cart";
@@ -49,6 +49,12 @@ const ShopingCartPage = () => {
       );
 
       setProducts(productsUpdate);
+      dispatch(
+        updateProductToCart({
+          quantity: quantity - 1,
+          productId,
+        })
+      );
     }
   };
 
@@ -61,20 +67,26 @@ const ShopingCartPage = () => {
     );
 
     setProducts(productsUpdate);
+    dispatch(
+      updateProductToCart({
+        quantity: quantity + 1,
+        productId,
+      })
+    );
   };
 
-  // Cập nhật lại giỏ hàng
-  const onHandleUpdateCart = () => {
-    products?.map((product) => {
-      dispatch(
-        addProductToCart({
-          quantity: product.quantity,
-          productId: product.productId._id,
-        })
-      );
-    });
-    message.success("Cập nhật giỏ hàng thành công!");
-  };
+  // // Cập nhật lại giỏ hàng
+  // const onHandleUpdateCart = () => {
+  //   products?.map((product) => {
+  //     dispatch(
+  //       updateProductToCart({
+  //         quantity: product.quantity,
+  //         productId: product.productId._id,
+  //       })
+  //     );
+  //   });
+  //   message.success("Cập nhật giỏ hàng thành công!");
+  // };
 
   return (
     <>
@@ -112,8 +124,8 @@ const ShopingCartPage = () => {
                           <img src={product.productId.image?.url} alt="" />
                         </div>
                       </td>
-                      <td className="column-2">{product.productId.name}</td>
-                      <td className="column-3">${product.price}</td>
+                      <td className="column-2">{product.productId?.name}</td>
+                      <td className="column-3">${product.productId?.price}</td>
                       <td className="column-4">
                         <div
                           style={{ marginLeft: "18px" }}
@@ -153,9 +165,7 @@ const ShopingCartPage = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="column-5">
-                        ${product.quantity * product.price}
-                      </td>
+                      <td className="column-5">${product.price}</td>
                     </tr>
                   ))}
                 </table>
@@ -170,9 +180,9 @@ const ShopingCartPage = () => {
                   <button className="update-cart">Apply coupon</button>
                 </div>
 
-                <div onClick={onHandleUpdateCart} className="update-cart">
+                {/* <div onClick={onHandleUpdateCart} className="update-cart">
                   Update Cart
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="sub-row-2">

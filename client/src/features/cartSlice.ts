@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addToCart, deleteProductCart, getCartUser } from "../api/cart";
+import {
+  addToCart,
+  deleteProductCart,
+  getCartUser,
+  updateProductCart,
+} from "../api/cart";
 import { IAddToCart } from "../interfaces/cart";
 
 interface initialState {
@@ -28,6 +33,16 @@ export const addProductToCart: any = createAsyncThunk(
   "cart/addToCart",
   async (dataCart: IAddToCart) => {
     const { data } = await addToCart(dataCart);
+
+    return data.cart;
+  }
+);
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const updateProductToCart: any = createAsyncThunk(
+  "cart/updateProductCart",
+  async (dataCart: IAddToCart) => {
+    const { data } = await updateProductCart(dataCart);
 
     return data.cart;
   }
@@ -68,6 +83,17 @@ const cartSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(addProductToCart.rejected, (state) => {
+        state.isLoading = false;
+      })
+      // Update Product To Cart
+      .addCase(updateProductToCart.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateProductToCart.fulfilled, (state, action) => {
+        state.cart = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(updateProductToCart.rejected, (state) => {
         state.isLoading = false;
       })
       // Delete Product Cart

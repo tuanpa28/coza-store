@@ -22,6 +22,10 @@ const addToCart = (dataCart: IAddToCart) => {
   return instance.post(`cart/add`, dataCart, options());
 };
 
+const updateProductCart = (dataCart: IAddToCart) => {
+  return instance.put(`cart/update`, dataCart, options());
+};
+
 const deleteProductCart = (productId: string) => {
   return instance.delete(`cart/delete/${productId}`, options());
 };
@@ -38,6 +42,7 @@ export {
   getCarts,
   getCartUser,
   addToCart,
+  updateProductCart,
   deleteProductCart,
   deleteCart,
   checkOut,

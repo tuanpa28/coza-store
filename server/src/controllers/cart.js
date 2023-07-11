@@ -111,7 +111,9 @@ export const updateCart = async (req, res) => {
   const { productId, quantity } = req.body;
   try {
     // Kiểm tra xem user có giỏ hàng hay chưa
-    let cart = await Cart.findOne({ userId });
+    let cart = await Cart.findOne({ userId })
+      .populate("products.productId")
+      .populate("userId");
 
     // Nếu không tìm thấy giỏ hàng, trả về lỗi
     if (!cart) {
