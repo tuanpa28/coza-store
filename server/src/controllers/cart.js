@@ -122,7 +122,7 @@ export const updateCart = async (req, res) => {
 
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
     let product = cart.products.find(
-      (product) => product.productId == productId
+      (product) => product?.productId?._id == productId
     );
 
     // Nếu không tìm thấy sản phẩm trong giỏ hàng, trả về lỗi
