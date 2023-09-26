@@ -1,23 +1,17 @@
-// import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Footer from "../../Footer/Footer";
-import { ReactNode } from "react";
 // import Header from "../../Header/Header";
 
 // import ProductList from "../../ProductList/ProductList";
 // import Categories from "../../Categories/Categories";
 
-interface IBaseLayout {
-  children: ReactNode;
-}
-
-const BaseLayout = ({ children }: IBaseLayout) => {
+const BaseLayout = () => {
   return (
     <div id="alll" className="all">
       {/* <Header /> */}
       {/* end header */}
       {/* <Categories /> */}
-      {/* <Outlet /> */}
-      {children}
+      <Outlet />
 
       <Footer />
       {/* <!-- end footer --> */}

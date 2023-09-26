@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { Link, Navigate } from "react-router-dom";
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 import { MenuProps } from "antd";
 import {
   Breadcrumb,
@@ -19,6 +19,7 @@ import {
 } from "@ant-design/icons";
 import reactLogo from "../../../assets/react.svg";
 import HeaderComponent from "../../Admin/Header/Header";
+import { Outlet } from "react-router-dom";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -50,11 +51,7 @@ const items: MenuItem[] = [
   ]),
 ];
 
-interface IAdminLayout {
-  children: ReactNode;
-}
-
-const AdminLayout = ({ children }: IAdminLayout) => {
+const AdminLayout = () => {
   const [current, setCurrent] = useState("1");
   const [collapsed, setCollapsed] = useState(false);
 
@@ -120,13 +117,12 @@ const AdminLayout = ({ children }: IAdminLayout) => {
             ]}
           />
           <main style={{ marginTop: 25 }}>
-            {Cookies.get("accessToken")
-              ? // <Outlet />
-                children
-              : (message.success(
-                  "Mời bạn đăng nhập để truy cập trang quản trị!"
-                ),
-                (<Navigate to="/signin" replace />))}
+            {Cookies.get("accessToken") ? (
+              <Outlet />
+            ) : (
+              (message.success("Mời bạn đăng nhập để truy cập trang quản trị!"),
+              (<Navigate to="/signin" replace />))
+            )}
           </main>
         </Content>
         <Footer style={{ textAlign: "center" }}>
