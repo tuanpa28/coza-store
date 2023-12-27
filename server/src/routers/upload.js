@@ -9,8 +9,8 @@ import {
 
 const router = Router();
 
-// router.post("/images/upload", upload.array("image", 5), uploadImage);
-// router.put("/images/:publicId", upload.array("image", 5), updateImage);
-// router.delete("/images/:publicId", deleteImage);
+router.post("/images/upload", upload.array("image", 5), uploadImage);
+router.put("/images/:publicId", upload.array("image", 5), updateImage);
+router.delete("/images/:publicId", deleteImage);
 
 export default router;
